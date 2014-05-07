@@ -16,24 +16,57 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import asgn2Exceptions.VehicleException;
+import asgn2Vehicles.MotorCycle;
+
 /**
  * @author hogan
  *
  */
 public class MotorCycleTests {
+	
+	private final int ZERO = 0;
+	private final int NEG_ONE = -1;
 
+	private final String VEH_ID = "ABC123";
+	
+	private MotorCycle moto;
+	
 	/**
-	 * @throws java.lang.Exception
+	 * @throws asgn2.Exceptions.VehicleException
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws VehicleException {
+		this.moto = new MotorCycle(VEH_ID, ZERO);
+	}
+
+//////////////////////////////////////////////////////////////////////////
+// MotorCycle Tests
+//////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////
+	// Construction tests
+	//////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Test method for bad construction of motorcycle
+	 * with negative arrival time
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author Brad
+	 */
+	@Test(expected=VehicleException.class)
+	public void motoArriveBeforeZero() throws VehicleException{
+		this.moto = new MotorCycle(VEH_ID, NEG_ONE); 
 	}
 
 	/**
-	 * @throws java.lang.Exception
+	 * Test method for good construction of MotorCycle
+	 * @throws asgn.Exceptions.VehicleException
+	 * @author Brad
 	 */
-	@After
-	public void tearDown() throws Exception {
+	@Test
+	public void motoArriveAtZero() throws VehicleException{
+		this.moto = new MotorCycle(VEH_ID, ZERO); 
 	}
 
 	/**
