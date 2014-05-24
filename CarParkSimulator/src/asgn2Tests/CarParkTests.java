@@ -23,11 +23,28 @@ import org.junit.Test;
 public class CarParkTests {
 	
 	private final int MAX_CAR_SPACES = 100;
-	private final MAX_SMALL_CAR_SPACES = 30;
+	private final int MAX_SMALL_CAR_SPACES = 30;
 	private final int MAX_MOTORCYCLES_SPACES = 20;
 	private final int MAX_QUEUE_SIZE = 10;
 	
+	private final int ARRIVAL_TIME = 20;
+	private final int END_CARPARK_DEPARTURE_TIME = 18 * 60;
+	private final int INTENDED_DURATION = 20;
+	private final int SIM_TIME = 20;
+	private final int DEPARTURE_TIME = ARRIVAL_TIME + INTENDED_DURATION;
+	
 	private CarPark carpark;
+	
+	private final int ZERO = 0;
+	private final int NEG_ONE = -1;
+	private final int ONE = 1;
+	
+	private final boolean SMALL = true;
+	private final boolean NOT_SMALL = false;
+	
+	private final String VEH_ID = "ABC123";
+	
+	private Car car;
 
 	/**
 	 * @throws asgn2.Exceptions.VehicleException
@@ -49,21 +66,34 @@ public class CarParkTests {
 	/**
 	 * Test method for 
 	 * @throws asgn2.Exceptions.VehicleException
-	 * @author 
+	 * @author Bec
 	 */
 	@Test(expected=VehicleException.class)
 	public void testDepartingVehicleIncorrectState() throws VehicleException {
+		Carpark carpark = new Carpark();
+		Car car = new Car(VEH_ID, ONE, SMALL);
 		
+		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		carpark.unparkVehicle(car, ARRIVAL_TIME + 10);
+		assertFalse(Vehicle.isParked()); // required??
+		
+		carpark.archiveDepartingVehicles(DEPARTURE_TIME, false);
 	}
 	
 	/**
 	 * Test method for 
 	 * @throws asgn2.Exceptions.VehicleException
-	 * @author 
+	 * @author Bec
 	 */
 	@Test
 	public void testDepartingVehicleCorrectState() throws VehicleException {
+		Carpark carpark = new Carpark();
+		Car car = new Car(VEH_ID, ONE, SMALL);
 		
+		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		assertTrue(Vehicle.isParked()); // required??
+		
+		carpark.archiveDepartingVehicles(DEPARTURE_TIME, false);
 	}
 
 	//////////////////////////////////////////////////////////////////////////
