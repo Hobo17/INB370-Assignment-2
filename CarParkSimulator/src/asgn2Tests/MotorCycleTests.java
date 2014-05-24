@@ -23,14 +23,14 @@ import asgn2Vehicles.MotorCycle;
  *
  */
 public class MotorCycleTests {
-	
-	private final int ZERO = 0;
+
 	private final int NEG_ONE = -1;
+	private final int ZERO = 0;
 
 	private final int MINIMUM_INTENDED_DURATION = 20;
 	private final int MAXIMUM_QUEUE_TIME = 25;
 	
-	private final String VEH_ID = "ABC123";
+	private final String VEH_ID = "MC22";
 	private final int NORMAL_ARRIVE_TIME = 30;
 	private final int NORMAL_PARKING_TIME = 30;
 	private final int NORMAL_INTENDED_DURATION = 30;
@@ -44,7 +44,7 @@ public class MotorCycleTests {
 	 */
 	@Before
 	public void setUp() throws VehicleException {
-		this.moto = new MotorCycle(VEH_ID, NORMAL_ARRIVE_TIME);
+		moto = new MotorCycle(VEH_ID, NORMAL_ARRIVE_TIME);
 	}
 
 //////////////////////////////////////////////////////////////////////////
@@ -61,8 +61,8 @@ public class MotorCycleTests {
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
 	@Test(expected=VehicleException.class)
-	public void motoArriveBeforeZero() throws VehicleException{
-		this.moto = new MotorCycle(VEH_ID, NEG_ONE); 
+	public void testMotoArriveBeforeZero() throws VehicleException{
+		moto = new MotorCycle(VEH_ID, NEG_ONE); 
 	}
 
 	/**
@@ -72,8 +72,8 @@ public class MotorCycleTests {
 	 * @throws asgn.Exceptions.VehicleException
 	 */
 	@Test
-	public void motoArriveAtZero() throws VehicleException{
-		this.moto = new MotorCycle(VEH_ID, ZERO); 
+	public void testMotoArriveEqualsZero() throws VehicleException{
+		moto = new MotorCycle(VEH_ID, ZERO); 
 	}
 
 	/**
@@ -82,8 +82,8 @@ public class MotorCycleTests {
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
 	@Test
-	public void motoArriveNoPlates() throws VehicleException{
-		this.moto = new MotorCycle("", ZERO);
+	public void testMotoNoPlates() throws VehicleException{
+		moto = new MotorCycle("", ZERO);
 	}
 
 	/**
@@ -91,8 +91,8 @@ public class MotorCycleTests {
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
 	@Test
-	public void motoNormalEntry() throws VehicleException{
-		this.moto = new MotorCycle(VEH_ID, NORMAL_ARRIVE_TIME);
+	public void testMotoValid() throws VehicleException{
+		moto = new MotorCycle(VEH_ID, NORMAL_ARRIVE_TIME);
 	}
 
 //////////////////////////////////////////////////////////////////////////
@@ -557,12 +557,12 @@ public class MotorCycleTests {
 		moto.enterQueuedState();
 		moto.exitQueuedState(NORMAL_EXIT_TIME);
 		moto.enterParkedState(NORMAL_PARKING_TIME, NORMAL_INTENDED_DURATION);
+		moto.exitParkedState(NORMAL_DEPARTURE_TIME);
 		assertEquals(moto.toString(), "Vehicle vehID: " + moto.getVehID() + 
 				"\nArrival Time: " + moto.getArrivalTime() + 
 				"\nQueuing Time: " + moto.getArrivalTime() +
 				"\nParking Time: " + moto.getParkingTime() +
-				"\nCustomer was satisfied" + 
-				"\n Car cannot use small car parking space");
+				"\nCustomer was satisfied");
 	}
 
 }
