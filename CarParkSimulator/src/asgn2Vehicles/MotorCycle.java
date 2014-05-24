@@ -29,5 +29,10 @@ public class MotorCycle extends Vehicle {
 	 * @throws VehicleException if arrivalTime is <= 0  
 	 */
 	public MotorCycle(String vehID, int arrivalTime) throws VehicleException {
+		super(vehID, arrivalTime);
+		
+		if(arrivalTime <= 0){  // Not really required because of super's check?
+			throw new VehicleException ("The arrivalTime must be greater than 0. (" + arrivalTime + ")");
+		}
 	}
 }

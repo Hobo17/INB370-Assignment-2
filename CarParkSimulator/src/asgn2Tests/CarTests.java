@@ -31,9 +31,9 @@ public class CarTests {
 	private final int NORMAL_ARRIVE_TIME = 30;
 	private final boolean IS_SMALL_CAR = false;
 
-	private final int NORMAL_PARKING_TIME = 30;
+	private final int NORMAL_PARKING_TIME = NORMAL_ARRIVE_TIME + 10;
 	private final int NORMAL_INTENDED_DURATION = 30;
-	private final int NORMAL_EXIT_TIME = 60;
+	private final int NORMAL_EXIT_TIME = NORMAL_PARKING_TIME;
 	private final int NORMAL_DEPARTURE_TIME = 90;
 	
 	private Car car;
@@ -96,17 +96,19 @@ public class CarTests {
 	 * Test method for {@link asgn2Vehicles.Car#toString()}.
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
-	@Test
 	public void testToString() throws VehicleException {
 		car.enterQueuedState();
 		car.exitQueuedState(NORMAL_EXIT_TIME);
 		car.enterParkedState(NORMAL_PARKING_TIME, NORMAL_INTENDED_DURATION);
+		car.exitParkedState(NORMAL_DEPARTURE_TIME);
 		assertEquals(car.toString(), "Vehicle vehID: " + car.getVehID() + 
 				"\nArrival Time: " + car.getArrivalTime() + 
-				"\nQueuing Time: " + car.getArrivalTime() +
-				"\nParking Time: " + car.getParkingTime() +
-				"\nCustomer was satisfied" + 
-				"\n Car cannot use small car parking space");
+				"\nExit from Queue: " + car.getParkingTime() +
+				"\nQueuing Time: " + (car.getParkingTime() - car.getArrivalTime()) +
+				"\nEntry to Car Park: " + car.getParkingTime() +
+				"\nExit from Car Park: " + car.getDepartureTime() +
+				"\nParking Time: " + (car.getDepartureTime() - car.getParkingTime()) +
+				"\nCustomer was satisfied");
 	}
 	
 	/**
@@ -123,10 +125,13 @@ public class CarTests {
 		car.exitParkedState(NORMAL_DEPARTURE_TIME);
 		assertEquals(car.toString(), "Vehicle vehID: " + car.getVehID() + 
 				"\nArrival Time: " + car.getArrivalTime() + 
-				"\nQueuing Time: " + car.getArrivalTime() +
-				"\nParking Time: " + car.getParkingTime() +
+				"\nExit from Queue: " + car.getParkingTime() +
+				"\nQueuing Time: " + (car.getParkingTime() - car.getArrivalTime()) +
+				"\nEntry to Car Park: " + car.getParkingTime() +
+				"\nExit from Car Park: " + car.getDepartureTime() +
+				"\nParking Time: " + (car.getDepartureTime() - car.getParkingTime()) +
 				"\nCustomer was satisfied" + 
-				"\n Car can use small car parking space");
+				"\nCar can use small parking space");
 	}
 	
 	//////////////////////////////////////////////////////////////////////////
