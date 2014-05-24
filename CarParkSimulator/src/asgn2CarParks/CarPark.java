@@ -51,6 +51,8 @@ public class CarPark {
 	}
 	
 	/**
+	 * manage containers: queue, carpark (spaces), archive in 3 data structures	 * 
+	 * 
 	 * CarPark constructor sets the basic size parameters. 
 	 * @param maxCarSpaces maximum number of spaces allocated to cars in the car park 
 	 * @param maxSmallCarSpaces maximum number of spaces (a component of maxCarSpaces) 
@@ -75,6 +77,9 @@ public class CarPark {
 	/**
 	 * Method to archive new vehicles that don't get parked or queued and are turned 
 	 * away
+	 * 
+	 * unsatisfied customer
+	 * 
 	 * @param v Vehicle to be archived
 	 * @throws SimulationException if vehicle is currently queued or parked
 	 */
@@ -90,8 +95,12 @@ public class CarPark {
 	}
 	
 	/**
+	 * 2 concerns in this method: archive, queue
+	 * ie (current time - arrival time) > max queue time
+	 * 
 	 * Simple status showing whether carPark is empty
 	 * @return true if car park empty, false otherwise
+	 * @throws VehicleException if one or more vehicles not in the correct state or if timing constraints are violated
 	 */
 	public boolean carParkEmpty() {
 	}
@@ -247,6 +256,8 @@ public class CarPark {
 	}
 
 	/**
+	 * if there are spaces available in the carpark, park the cars in the queue
+	 * 
 	 * Simple status showing whether queue is empty
 	 * @return true if queue empty, false otherwise
 	 */
@@ -288,6 +299,8 @@ public class CarPark {
 	}
 
 	/**
+	 * process new vehicle: private method
+	 * 
 	 * Method to remove vehicle from the carpark. 
 	 * For symmetry with parkVehicle, include transition via Vehicle.exitParkedState.  
 	 * So vehicle should be in parked state prior to entry to this method. 
