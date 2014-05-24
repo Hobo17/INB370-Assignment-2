@@ -33,6 +33,13 @@ public class Car extends Vehicle {
 	 * @throws VehicleException if arrivalTime is <= 0  
 	 */
 	public Car(String vehID, int arrivalTime, boolean small) throws VehicleException {
+		super(vehID, arrivalTime);
+		
+		if(arrivalTime <= 0){  // Not really required because of super's check?
+			throw new VehicleException ("The arrivalTime must be greater than 0. (" + arrivalTime + ")");
+		}
+		
+		this.small = small;
 	}
 
 	/**
@@ -41,6 +48,7 @@ public class Car extends Vehicle {
 	 * @return true if small parking space, false otherwise
 	 */
 	public boolean isSmall() {
+		return this.small;
 	}
 
 	/* (non-Javadoc)
@@ -48,5 +56,6 @@ public class Car extends Vehicle {
 	 */
 	@Override
 	public String toString() {
+		return super.toString();
 	}
 }
