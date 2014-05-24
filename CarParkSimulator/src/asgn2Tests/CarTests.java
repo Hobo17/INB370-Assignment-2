@@ -21,43 +21,89 @@ import org.junit.Test;
  *
  */
 public class CarTests {
+	
+	private final int ZERO = 0;
+	private final int NEG_ONE = -1;
+	private final int ONE = 1;
+	
+	private final boolean SMALL = true;
+	private final boolean NOT_SMALL = false;
+	
+	private final String VEH_ID = "ABC123";
+	
+	private Car car;
 
 	/**
-	 * @throws java.lang.Exception
+	 * @throws asgn2.Exceptions.VehicleException
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws VehicleException {
+		this.car = new Car(VEH_ID, ZERO, NOT_SMALL);
 	}
+	
+//////////////////////////////////////////////////////////////////////////
+// Car Tests
+//////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////
+	// Construction tests
+	//////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * @throws java.lang.Exception
+	 * Test method for bad construction of car
+	 * with negative arrival time
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author Bec
 	 */
-	@After
-	public void tearDown() throws Exception {
+	@Test(expected=VehicleException.class)
+	public void carArriveBeforeZero() throws VehicleException {
+		this.car = new Car(VEH_ID, NEG_ONE, NOT_SMALL); 
 	}
 
 	/**
-	 * Test method for {@link asgn2Vehicles.Car#toString()}.
+	 * Test method for bad construction of car
+	 * with zero arrival time
+	 * @throws asgn.Exceptions.VehicleException
+	 * @author Bec
+	 */
+	@Test(expected=VehicleException.class)
+	public void carArriveAtZero() throws VehicleException {
+		this.car = new Car(VEH_ID, ZERO, NOT_SMALL); 
+	}
+
+	/**
+	 * Test method for good construction of car
+	 * with one arrival time
+	 * @throws asgn.Exceptions.VehicleException
+	 * @author Bec
 	 */
 	@Test
-	public void testToString() {
-		fail("Not yet implemented"); // TODO
+	public void carArriveAtOne() throws VehicleException {
+		this.car = new Car(VEH_ID, ONE, NOT_SMALL); 
 	}
+	
+	//////////////////////////////////////////////////////////////////////////
+	// isSmall tests
+	//////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Test method for {@link asgn2Vehicles.Car#Car(java.lang.String, int, boolean)}.
+	 * Test method for construction of a small car
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author Bec
 	 */
 	@Test
-	public void testCar() {
-		fail("Not yet implemented"); // TODO
+	public void testIsSmall() throws VehicleException {
+		this.car = new Car(VEH_ID, ONE, SMALL);
 	}
-
+	
 	/**
-	 * Test method for {@link asgn2Vehicles.Car#isSmall()}.
+	 * Test method for construction of a normal car
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author Bec
 	 */
 	@Test
-	public void testIsSmall() {
-		fail("Not yet implemented"); // TODO
+	public void testIsNotSmall() throws VehicleException {
+		this.car = new Car(VEH_ID, ONE, NOT_SMALL);
 	}
 
 }

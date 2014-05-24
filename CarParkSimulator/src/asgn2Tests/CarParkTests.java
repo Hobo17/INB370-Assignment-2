@@ -30,10 +30,10 @@ public class CarParkTests {
 	private CarPark carpark;
 
 	/**
-	 * @throws java.lang.Exception
+	 * @throws asgn2.Exceptions.VehicleException
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws VehicleException {
 		this.carpark = new CarPark(MAX_CAR_SPACES, MAX_SMALL_CAR_SPACES, 
 				MAX_MOTORCYCLE_SPACES, MAX_QUEUE_SIZE);
 	}
@@ -46,11 +46,21 @@ public class CarParkTests {
 	// archiveDepartingVehicles tests
 	//////////////////////////////////////////////////////////////////////////
 
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author 
+	 */
 	@Test(expected=VehicleException.class)
 	public void testDepartingVehicleIncorrectState() throws VehicleException {
 		
 	}
 	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author 
+	 */
 	@Test
 	public void testDepartingVehicleCorrectState() throws VehicleException {
 		
@@ -60,6 +70,11 @@ public class CarParkTests {
 	// archiveNewVehicle tests
 	//////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author 
+	 */
 	@Test
 	public void testArchiveNewVehicle() {
 		fail("Not yet implemented"); // TODO
@@ -69,6 +84,11 @@ public class CarParkTests {
 	// archiveQueueFailures tests
 	//////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author 
+	 */
 	@Test
 	public void testArchiveQueueFailures() {
 		fail("Not yet implemented"); // TODO
@@ -78,6 +98,11 @@ public class CarParkTests {
 	// enterQueue tests
 	//////////////////////////////////////////////////////////////////////////
 
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author 
+	 */
 	@Test
 	public void testEnterQueue() {
 		fail("Not yet implemented"); // TODO
@@ -87,6 +112,11 @@ public class CarParkTests {
 	// exitQueue tests
 	//////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author 
+	 */
 	@Test
 	public void testExitQueue() {
 		fail("Not yet implemented"); // TODO
@@ -96,6 +126,11 @@ public class CarParkTests {
 	// parkVehicle tests
 	//////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author 
+	 */
 	@Test
 	public void testParkVehicle() {
 		fail("Not yet implemented"); // TODO
@@ -105,6 +140,11 @@ public class CarParkTests {
 	// processQueue tests
 	//////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author 
+	 */
 	@Test
 	public void testProcessQueue() {
 		fail("Not yet implemented"); // TODO
@@ -114,6 +154,11 @@ public class CarParkTests {
 	// tryProcessNewVehicle tests
 	//////////////////////////////////////////////////////////////////////////
 
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author 
+	 */
 	@Test
 	public void testTryProcessNewVehicles() {
 		fail("Not yet implemented"); // TODO
@@ -123,6 +168,11 @@ public class CarParkTests {
 	// unparkVehicle tests
 	//////////////////////////////////////////////////////////////////////////
 
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @author 
+	 */
 	@Test
 	public void testUnparkVehicle() {
 		fail("Not yet implemented"); // TODO
