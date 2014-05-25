@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import asgn2Exceptions.VehicleException;
+import asgn2Simulators.Constants;
 import asgn2Vehicles.MotorCycle;
 
 /**
@@ -27,16 +28,13 @@ public class MotorCycleTests {
 	private final int NEG_ONE = -1;
 	private final int ZERO = 0;
 	private final int ONE = 1;
-
-	private final int MINIMUM_INTENDED_DURATION = 20;
-	private final int MAXIMUM_QUEUE_TIME = 25;
 	
 	private final String VEH_ID = "MC22";
 	private final int NORMAL_ARRIVE_TIME = 30;
-	private final int NORMAL_PARKING_TIME = 30;
+	private final int NORMAL_PARKING_TIME = NORMAL_ARRIVE_TIME + 10;
 	private final int NORMAL_INTENDED_DURATION = 30;
-	private final int NORMAL_EXIT_TIME = 60;
-	private final int NORMAL_DEPARTURE_TIME = 90;
+	private final int NORMAL_EXIT_TIME = NORMAL_PARKING_TIME;
+	private final int NORMAL_DEPARTURE_TIME = NORMAL_PARKING_TIME + NORMAL_INTENDED_DURATION;
 	
 	private MotorCycle moto;
 	
@@ -96,7 +94,7 @@ public class MotorCycleTests {
 	 */
 	@Test
 	public void testMotoNoPlates() throws VehicleException {
-		moto = new MotorCycle("", ZERO);
+		moto = new MotorCycle("", NORMAL_ARRIVE_TIME);
 	}
 
 	/**
@@ -281,7 +279,7 @@ public class MotorCycleTests {
 	 */
 	@Test(expected=VehicleException.class)
 	public void testEnterParkedStateDurationUnderMin() throws VehicleException {
-		moto.enterParkedState(NORMAL_PARKING_TIME, MINIMUM_INTENDED_DURATION - 1);
+		moto.enterParkedState(NORMAL_PARKING_TIME, Constants.MINIMUM_STAY - 1);
 	}
 
 	/**
@@ -289,9 +287,9 @@ public class MotorCycleTests {
 	 * when intended duration equals the minimum
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
-	@Test(expected=VehicleException.class)
+	@Test
 	public void testEnterParkedStateDurationEqualsMin() throws VehicleException {
-		moto.enterParkedState(NORMAL_PARKING_TIME, MINIMUM_INTENDED_DURATION);
+		moto.enterParkedState(NORMAL_PARKING_TIME, Constants.MINIMUM_STAY);
 	}
 	
 	/**
@@ -331,7 +329,7 @@ public class MotorCycleTests {
 
 	/**
 	 * Test method for {@link asgn2Vehicles.Vehicle#exitParkedState()}.
-	 * when exitTime !> arrivalTime
+	 * when exitTime <= arrivalTime
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
 	@Test(expected=VehicleException.class)
@@ -345,7 +343,7 @@ public class MotorCycleTests {
 	 * when exitTime > arrivalTime
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
-	@Test(expected=VehicleException.class)
+	@Test
 	public void testExitParkedStateTimeOver() throws VehicleException {
 		moto.enterParkedState(NORMAL_PARKING_TIME, NORMAL_INTENDED_DURATION);
 		moto.exitParkedState(NORMAL_PARKING_TIME + 1);
@@ -528,10 +526,12 @@ public class MotorCycleTests {
 	 */
 	@Test
 	public void testIsSatisfiedTimeEqualsMax() throws VehicleException {
+		int parkTime = NORMAL_ARRIVE_TIME + Constants.MAXIMUM_QUEUE_TIME;
+
 		moto.enterQueuedState();
-		moto.exitQueuedState(MAXIMUM_QUEUE_TIME);
-		moto.enterParkedState(NORMAL_PARKING_TIME, MINIMUM_INTENDED_DURATION);
-		assertFalse(moto.isSatisfied());
+		moto.exitQueuedState(parkTime);
+		moto.enterParkedState(parkTime, Constants.MINIMUM_STAY);
+		assertTrue(moto.isSatisfied());
 	}
 	
 	/**
@@ -541,9 +541,11 @@ public class MotorCycleTests {
 	 */
 	@Test
 	public void testIsSatisfiedTimeOverMax() throws VehicleException {
+		int parkTime = NORMAL_ARRIVE_TIME + Constants.MAXIMUM_QUEUE_TIME + 1;
+
 		moto.enterQueuedState();
-		moto.exitQueuedState(MAXIMUM_QUEUE_TIME + 1);
-		moto.enterParkedState(NORMAL_PARKING_TIME, MINIMUM_INTENDED_DURATION);
+		moto.exitQueuedState(parkTime);
+		moto.enterParkedState(parkTime, Constants.MINIMUM_STAY);
 		assertFalse(moto.isSatisfied());
 	}
 
@@ -553,7 +555,7 @@ public class MotorCycleTests {
 	 */
 	@Test
 	public void testIsSatisfiedTrue() throws VehicleException {
-		moto.enterParkedState(NORMAL_PARKING_TIME, MINIMUM_INTENDED_DURATION);
+		moto.enterParkedState(NORMAL_PARKING_TIME, Constants.MINIMUM_STAY);
 		assertTrue(moto.isSatisfied());
 	}
 
@@ -573,8 +575,11 @@ public class MotorCycleTests {
 		moto.exitParkedState(NORMAL_DEPARTURE_TIME);
 		assertEquals(moto.toString(), "Vehicle vehID: " + moto.getVehID() + 
 				"\nArrival Time: " + moto.getArrivalTime() + 
-				"\nQueuing Time: " + moto.getArrivalTime() +
-				"\nParking Time: " + moto.getParkingTime() +
+				"\nExit from Queue: " + moto.getParkingTime() +
+				"\nQueuing Time: " + (moto.getParkingTime() - moto.getArrivalTime()) +
+				"\nEntry to Car Park: " + moto.getParkingTime() +
+				"\nExit from Car Park: " + moto.getDepartureTime() +
+				"\nParking Time: " + (moto.getDepartureTime() - moto.getParkingTime()) +
 				"\nCustomer was satisfied");
 	}
 

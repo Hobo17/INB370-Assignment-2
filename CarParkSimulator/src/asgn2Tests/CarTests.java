@@ -24,27 +24,18 @@ import asgn2Vehicles.Car;
  */
 public class CarTests {
 
-	private final int ZERO = 0;
-<<<<<<< HEAD
 	private final int NEG_ONE = -1;
-=======
->>>>>>> 6e3a26117b7c506a6aa9682b27331fda66cfaecd
+	private final int ZERO = 0;
 	private final int ONE = 1;
 	
 	private final String VEH_ID = "C23";
 	private final int NORMAL_ARRIVE_TIME = 30;
 	private final boolean IS_SMALL_CAR = false;
 
-<<<<<<< HEAD
-	private final int NORMAL_PARKING_TIME = 30;
-	private final int NORMAL_INTENDED_DURATION = 30;
-	private final int NORMAL_EXIT_TIME = 60;
-=======
 	private final int NORMAL_PARKING_TIME = NORMAL_ARRIVE_TIME + 10;
 	private final int NORMAL_INTENDED_DURATION = 30;
 	private final int NORMAL_EXIT_TIME = NORMAL_PARKING_TIME;
->>>>>>> 6e3a26117b7c506a6aa9682b27331fda66cfaecd
-	private final int NORMAL_DEPARTURE_TIME = 90;
+	private final int NORMAL_DEPARTURE_TIME = NORMAL_PARKING_TIME + NORMAL_INTENDED_DURATION;
 	
 	private Car car;
 	
@@ -62,20 +53,17 @@ public class CarTests {
 
 	/**
 	 * Test method for {@link asgn2Vehicles.Car#Car(java.lang.String, int, boolean)}
-<<<<<<< HEAD
 	 * with car arriving before 0
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @author Bec
 	 */
 	@Test(expected=VehicleException.class)
-	public void testCarArriveEqualsZero() throws VehicleException {
+	public void testCarArriveBelowZero() throws VehicleException {
 		car = new Car(VEH_ID, NEG_ONE, IS_SMALL_CAR);
 	}
 	
 	/**
 	 * Test method for {@link asgn2Vehicles.Car#Car(java.lang.String, int, boolean)}
-=======
->>>>>>> 6e3a26117b7c506a6aa9682b27331fda66cfaecd
 	 * with car arriving at 0
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
@@ -119,42 +107,6 @@ public class CarTests {
 	/**
 	 * Test method for {@link asgn2Vehicles.Car#toString()}.
 	 * @throws asgn2.Exceptions.VehicleException
-<<<<<<< HEAD
-	 */
-	@Test
-	public void testToString() throws VehicleException {
-		car.enterQueuedState();
-		car.exitQueuedState(NORMAL_EXIT_TIME);
-		car.enterParkedState(NORMAL_PARKING_TIME, NORMAL_INTENDED_DURATION);
-		assertEquals(car.toString(), "Vehicle vehID: " + car.getVehID() + 
-				"\nArrival Time: " + car.getArrivalTime() + 
-				"\nQueuing Time: " + car.getArrivalTime() +
-				"\nParking Time: " + car.getParkingTime() +
-				"\nCustomer was satisfied" + 
-				"\n Car cannot use small car parking space");
-	}
-	
-	/**
-	 * Test method for {@link asgn2Vehicles.Car#toString()}.
-	 * @throws asgn2.Exceptions.VehicleException
-	 */
-	@Test
-	public void testToStringSmallCar() throws VehicleException {
-		car = new Car(VEH_ID, NORMAL_ARRIVE_TIME, true);
-		
-		car.enterQueuedState();
-		car.exitQueuedState(NORMAL_EXIT_TIME);
-		car.enterParkedState(NORMAL_PARKING_TIME, NORMAL_INTENDED_DURATION);
-		car.exitParkedState(NORMAL_DEPARTURE_TIME);
-		assertEquals(car.toString(), "Vehicle vehID: " + car.getVehID() + 
-				"\nArrival Time: " + car.getArrivalTime() + 
-				"\nQueuing Time: " + car.getArrivalTime() +
-				"\nParking Time: " + car.getParkingTime() +
-				"\nCustomer was satisfied" + 
-				"\n Car can use small car parking space");
-	}
-	
-=======
 	 */
 	public void testToString() throws VehicleException {
 		car.enterQueuedState();
@@ -194,7 +146,6 @@ public class CarTests {
 				"\nCar can use small parking space");
 	}
 	
->>>>>>> 6e3a26117b7c506a6aa9682b27331fda66cfaecd
 	//////////////////////////////////////////////////////////////////////////
 	// isSmall tests
 	//////////////////////////////////////////////////////////////////////////
