@@ -42,7 +42,7 @@ import asgn2Simulators.Constants;
  * The method javadoc below indicates the constraints on the time and other parameters. Other time parameters may 
  * vary from simulation to simulation and so are not constrained here.  
  * 
- * @author Brad
+ * @author Brad Vose (n8280282)
  *
  */
 public abstract class Vehicle {

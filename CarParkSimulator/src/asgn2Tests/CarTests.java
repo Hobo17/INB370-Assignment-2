@@ -19,7 +19,7 @@ import asgn2Exceptions.VehicleException;
 import asgn2Vehicles.Car;
 
 /**
- * @author Brad
+ * @author Brad Vose (n8280282)
  *
  */
 public class CarTests {
