@@ -29,7 +29,7 @@ public class CarParkTests {
 	
 	private final int MAX_CAR_SPACES = 100;
 	private final int MAX_SMALL_CAR_SPACES = 30;
-	private final int MAX_MOTORCYCLES_SPACES = 20;
+	private final int MAX_MOTORCYCLE_SPACES = 20;
 	private final int MAX_QUEUE_SIZE = 10;
 	
 	private final int ARRIVAL_TIME = 20;
@@ -551,7 +551,7 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testParkVehicleMotorCycle() throws VehicleException {		
-		for (i = 0; i < (MAX_MOTORCYCLES_SPACES + MAX_SMALL_CAR_SPACES); i++) {
+		for (i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES); i++) {
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 	}
@@ -586,7 +586,7 @@ public class CarParkTests {
 	 */
 	@Test(expected=SimulationException.class)
 	public void testParkVehicleMotorCycleNoSpaces() throws SimulationException {		
-		for (i = 0; i < (MAX_MOTORCYCLES_SPACES + MAX_SMALL_CAR_SPACES + 1); i++) {
+		for (i = 0; i < (MAX_MOTORCYCLS_SPACES + MAX_SMALL_CAR_SPACES + 1); i++) {
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 	}
@@ -665,7 +665,7 @@ public class CarParkTests {
 	 */
 	@Test(expected=SimulationException.class)
 	public void testProcessQueueMotorCycleNoSpaces() throws SimulationException {	
-		for (i = 0; i < (MAX_MOTORCYCLES_SPACES + MAX_SMALL_CAR_SPACES); i++) {
+		for (i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES); i++) {
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
@@ -693,7 +693,8 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testProcessQueueCorrectState() throws VehicleException {
-			
+		carpark.enterQueue(car);
+		carpark.processQueue(ARRIVAL_TIME, sim)
 	}
 	
 	/**
@@ -702,7 +703,8 @@ public class CarParkTests {
 	 */
 	@Test(expected=VehicleException.class)
 	public void testProcessQueueNewState() throws VehicleException {
-			
+		this.car = new Car(VEH_ID, ONE, SMALL);
+		carpark.processQueue(ARRIVAL_TIME, sim)
 	}
 	
 	/**
@@ -711,7 +713,8 @@ public class CarParkTests {
 	 */
 	@Test(expected=VehicleException.class)
 	public void testProcessQueueParkedState() throws VehicleException {
-			
+		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		carpark.processQueue(ARRIVAL_TIME, sim)
 	}
 	
 	/**
@@ -720,20 +723,144 @@ public class CarParkTests {
 	 */
 	@Test(expected=VehicleException.class)
 	public void testProcessQueueArchivedState() throws VehicleException {
-			
+		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		carpark.unparkVehicle(car, DEPARTURE_TIME)
+		
+		carpark.processQueue(ARRIVAL_TIME, sim)
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test(expected=VehicleException.class)
+	public void testProcessQueueTimeConstraint() throws VehicleException {
+		this.car = new Car(VEH_ID, 20, SMALL);
+		carpark.enterQueue(car);		
+		carpark.processQueue(10, sim)
 	}
 	
 	//////////////////////////////////////////////////////////////////////////
 	// queueEmpty tests
 	//////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test
+	public void testQueueEmptyTrue() throws VehicleException {
+		assertTrue(carpark.queueEmpty);
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test(expected=VehicleException.class)
+	public void testQueueEmptyFalse() throws VehicleException {
+		carpark.enterQueue(car);
+		assertFalse(carpark.queueEmpty);
+	}
+	
 	//////////////////////////////////////////////////////////////////////////
 	// queueFull tests
 	//////////////////////////////////////////////////////////////////////////
 	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test
+	public void testQueueFullTrue() throws VehicleException {
+		for (i = 0; i < MAX_QUEUE_SIZE; i++) {
+			carpark.enterQueue(car);
+		}
+		assertTrue(carpark.queueFull);
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test(expected=VehicleException.class)
+	public void testQueueFullFalse() throws VehicleException {
+		carpark.enterQueue(car);
+		assertFalse(carpark.queueFull);
+	}
+	
 	//////////////////////////////////////////////////////////////////////////
 	// spacesAvailable tests
 	//////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test
+	public void testSpacesAvailableTrueBigCar() throws VehicleException {
+		this.car = new Car(VEH_ID, ONE, NOT_SMALL);
+		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		assertTrue(carpark.spacesAvailable(car));
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test
+	public void testSpacesAvailableFalseBigCar() throws VehicleException {
+		this.car = new Car(VEH_ID, ONE, NOT_SMALL);
+		
+		for (i = 0; i < MAX_CAR_SPACES; i++) {
+			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		}
+		assertFalse(carpark.spacesAvailable(car));
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test
+	public void testSpacesAvailableTrueSmallCar() throws VehicleException {
+		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		assertTrue(carpark.spacesAvailable(car));
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test
+	public void testSpacesAvailableFalseSmallCar() throws VehicleException {
+		for (i = 0; i < (MAX_SMALL_CAR_SPACES + MAX_CAR_SPACES); i++) {
+			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		}
+		assertFalse(carpark.spacesAvailable(car));
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test
+	public void testSpacesAvailableTrueMotorcycle() throws VehicleException {
+		carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
+		assertTrue(carpark.spacesAvailable(moto));
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test
+	public void testSpacesAvailableFalseMotorcycle() throws VehicleException {
+		for (i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES); i++) {
+			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
+		}
+		assertFalse(carpark.spacesAvailable(moto));
+	}
 	
 	//////////////////////////////////////////////////////////////////////////
 	// tryProcessNewVehicle tests
@@ -741,11 +868,52 @@ public class CarParkTests {
 
 	/**
 	 * Test method for 
+	 * @throws asgn2.Exceptions.SimulationException
+	 */
+	@Test(expected=SimulationException.class)
+	public void testTryProcessNewVehiclesBigCar() throws SimulationException {
+		this.car = new Car(VEH_ID, ONE, NOT_SMALL);
+		
+		for (i = 0; i < MAX_CAR_SPACES; i++) {
+			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		}
+		carpark.tryProcessNewVehicles(ARRIVAL_TIME, sim);
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.SimulationException
+	 */
+	@Test(expected=SimulationException.class)
+	public void testTryProcessNewVehiclesSmallCar() throws SimulationException {
+		for (i = 0; i < (MAX_SMALL_CAR_SPACES + MAX_CAR_SPACES); i++) {
+			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		}
+		carpark.tryProcessNewVehicles(ARRIVAL_TIME, sim);
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.SimulationException
+	 */
+	@Test(expected=SimulationException.class)
+	public void testTryProcessNewVehiclesMotorcycle() throws SimulationException {
+		for (i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES); i++) {
+			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
+		}
+		carpark.tryProcessNewVehicles(ARRIVAL_TIME, sim);
+	}
+	
+	/**
+	 * Test method for 
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
-	@Test
-	public void testTryProcessNewVehicles() throws VehicleException {
-		fail("Not yet implemented"); // TODO
+	@Test(expected=VehicleException.class)
+	public void testTryProcessNewVehiclesVehicleCreationConstraints() throws VehicleException {
+		//
+		// Vehicle creation constraints
+		//
+		carpark.tryProcessNewVehicles(ARRIVAL_TIME, sim);
 	}
 	
 	//////////////////////////////////////////////////////////////////////////
@@ -758,7 +926,48 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testUnparkVehicle() throws VehicleException {
-		fail("Not yet implemented"); // TODO
+		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		carpark.unparkVehicle(car, DEPARTURE_TIME);
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test(expected=VehicleException.class)
+	public void testUnparkVehicleNotParked() throws VehicleException {
+		carpark.unparkVehicle(car, DEPARTURE_TIME);
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test(expected=VehicleException.class)
+	public void testUnparkVehicleQueued() throws VehicleException {
+		carpark.enterQueue(car);
+		carpark.unparkVehicle(car, DEPARTURE_TIME);
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.VehicleException
+	 */
+	@Test(expected=VehicleException.class)
+	public void testUnparkVehicleTimingConstraints() throws VehicleException {
+		carpark.parkVehicle(car, 20, INTENDED_DURATION);
+		carpark.unparkVehicle(car, 10);
+	}
+	
+	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.SimulationException
+	 */
+	@Test(expected=SimulationException.class)
+	public void testUnparkVehicleNotInCarpark() throws SimulationException {
+		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		carpark.unparkVehicle(car, DEPARTURE_TIME);
+		carpark.unparkVehicle(car, DEPARTURE_TIME);
 	}
 
 }
