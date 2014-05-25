@@ -83,7 +83,7 @@ public class MotorCycleTests {
 	 * @author Bec
 	 */
 	@Test
-	public void motoArriveAtOne() throws VehicleException {
+	public void testMotoArriveAfterZero() throws VehicleException {
 		this.moto = new MotorCycle(VEH_ID, ONE); 
 	}
 
