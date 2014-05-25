@@ -516,7 +516,7 @@ public class MotorCycleTests {
 	 */
 	@Test
 	public void testIsSatisfiedNotParked() throws VehicleException {
-		assertFalse(moto.isSatisfied());
+		assertTrue(moto.isSatisfied());
 	}
 	
 	/**
@@ -532,21 +532,6 @@ public class MotorCycleTests {
 		moto.exitQueuedState(parkTime);
 		moto.enterParkedState(parkTime, Constants.MINIMUM_STAY);
 		assertTrue(moto.isSatisfied());
-	}
-	
-	/**
-	 * Test method for {@link asgn2Vehicles.Vehicle#isSatisfied()}
-	 * when having waited too long
-	 * @throws asgn2.Exceptions.VehicleException
-	 */
-	@Test
-	public void testIsSatisfiedTimeOverMax() throws VehicleException {
-		int parkTime = NORMAL_ARRIVE_TIME + Constants.MAXIMUM_QUEUE_TIME + 1;
-
-		moto.enterQueuedState();
-		moto.exitQueuedState(parkTime);
-		moto.enterParkedState(parkTime, Constants.MINIMUM_STAY);
-		assertFalse(moto.isSatisfied());
 	}
 
 	/**

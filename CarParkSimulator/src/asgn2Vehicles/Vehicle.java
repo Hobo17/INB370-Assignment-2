@@ -225,7 +225,7 @@ public abstract class Vehicle {
 	 * @return true if satisfied, false if never in parked state or if queuing time exceeds max allowable 
 	 */
 	public boolean isSatisfied() {
-		return(this.previousStates.contains("P") && (parkingTime - arrivalTime) <= Constants.MAXIMUM_QUEUE_TIME);
+		return(this.previousStates.contains("P") || (!this.previousStates.contains("P") && (parkingTime - arrivalTime) <= Constants.MAXIMUM_QUEUE_TIME));
 	}
 	
 	/* (non-Javadoc)
