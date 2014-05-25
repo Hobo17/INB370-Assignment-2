@@ -40,19 +40,29 @@ import asgn2Vehicles.Vehicle;
  */
 public class CarPark {
 
+	private int maxCarSpaces;
+	private int maxSmallCarSpaces;
+	private int maxMotorCycleSpaces;
+	private int maxQueueSize;
+	
+	private int time;
+	private boolean force;
+	
+	private int exitTime;
+	private int arrivalTime;
+	private int departureTime;
+	private int parkingTime;
 	
 	/**
 	 * CarPark constructor sets the basic size parameters. 
 	 * Uses default parameters
 	 */
 	public CarPark() {
-		this(Constants.DEFAULT_MAX_CAR_SPACES,Constants.DEFAULT_MAX_SMALL_CAR_SPACES,
-				Constants.DEFAULT_MAX_MOTORCYCLE_SPACES,Constants.DEFAULT_MAX_QUEUE_SIZE);
+		this(Constants.DEFAULT_MAX_CAR_SPACES, Constants.DEFAULT_MAX_SMALL_CAR_SPACES,
+				Constants.DEFAULT_MAX_MOTORCYCLE_SPACES, Constants.DEFAULT_MAX_QUEUE_SIZE);
 	}
 	
 	/**
-	 * manage containers: queue, carpark (spaces), archive in 3 data structures	 * 
-	 * 
 	 * CarPark constructor sets the basic size parameters. 
 	 * @param maxCarSpaces maximum number of spaces allocated to cars in the car park 
 	 * @param maxSmallCarSpaces maximum number of spaces (a component of maxCarSpaces) 
@@ -60,7 +70,11 @@ public class CarPark {
 	 * @param maxMotorCycleSpaces maximum number of spaces allocated to MotorCycles
 	 * @param maxQueueSize maximum number of vehicles allowed to queue
 	 */
-	public CarPark(int maxCarSpaces,int maxSmallCarSpaces, int maxMotorCycleSpaces, int maxQueueSize) {
+	public CarPark(int maxCarSpaces, int maxSmallCarSpaces, int maxMotorCycleSpaces, int maxQueueSize) {
+		this.maxCarSpaces = maxCarSpaces;
+		this.maxSmallCarSpaces = maxSmallCarSpaces;
+		this.maxMotorCycleSpaces = maxMotorCycleSpaces;
+		this.maxQueueSize = maxQueueSize;
 	}
 
 	/**
@@ -71,14 +85,14 @@ public class CarPark {
 	 * @throws VehicleException if vehicle to be archived is not in the correct state 
 	 * @throws SimulationException if one or more departing vehicles are not in the car park when operation applied
 	 */
-	public void archiveDepartingVehicles(int time,boolean force) throws VehicleException, SimulationException {
+	public void archiveDepartingVehicles(int time, boolean force) throws VehicleException, SimulationException {
 	}
 		
 	/**
 	 * Method to archive new vehicles that don't get parked or queued and are turned 
 	 * away
 	 * 
-	 * unsatisfied customer
+	 * ****unsatisfied customer****
 	 * 
 	 * @param v Vehicle to be archived
 	 * @throws SimulationException if vehicle is currently queued or parked
@@ -95,12 +109,11 @@ public class CarPark {
 	}
 	
 	/**
-	 * 2 concerns in this method: archive, queue
-	 * ie (current time - arrival time) > max queue time
+	 * *****2 concerns in this method: archive, queue*****
+	 * *****ie (current time - arrival time) > max queue time*****
 	 * 
 	 * Simple status showing whether carPark is empty
 	 * @return true if car park empty, false otherwise
-	 * @throws VehicleException if one or more vehicles not in the correct state or if timing constraints are violated
 	 */
 	public boolean carParkEmpty() {
 	}
@@ -133,7 +146,7 @@ public class CarPark {
 	 * @throws VehicleException if the vehicle is in an incorrect state or timing 
 	 * constraints are violated
 	 */
-	public void exitQueue(Vehicle v,int exitTime) throws SimulationException, VehicleException {
+	public void exitQueue(Vehicle v, int exitTime) throws SimulationException, VehicleException {
 	}
 	
 	/**
@@ -161,7 +174,7 @@ public class CarPark {
 	/**
 	 * Simple getter for number of motorcycles in the car park 
 	 * @return number of MotorCycles in car park, including those occupying 
-	 * 			a small car space
+	 * 		   a small car space
 	 */
 	public int getNumMotorCycles() {
 	}
@@ -256,7 +269,7 @@ public class CarPark {
 	}
 
 	/**
-	 * if there are spaces available in the carpark, park the cars in the queue
+	 * ****if there are no spaces available in the carpark, park the cars in the queue****
 	 * 
 	 * Simple status showing whether queue is empty
 	 * @return true if queue empty, false otherwise
@@ -295,11 +308,11 @@ public class CarPark {
 	 * @throws SimulationException if no suitable spaces available when operation attempted 
 	 * @throws VehicleException if vehicle creation violates constraints 
 	 */
-	public void tryProcessNewVehicles(int time,Simulator sim) throws VehicleException, SimulationException {
+	public void tryProcessNewVehicles(int time, Simulator sim) throws VehicleException, SimulationException {
 	}
 
 	/**
-	 * process new vehicle: private method
+	 * ****process new vehicle: private method****
 	 * 
 	 * Method to remove vehicle from the carpark. 
 	 * For symmetry with parkVehicle, include transition via Vehicle.exitParkedState.  
@@ -308,7 +321,7 @@ public class CarPark {
 	 * @throws VehicleException if Vehicle is not parked, is in a queue, or violates timing constraints 
 	 * @throws SimulationException if vehicle is not in car park
 	 */
-	public void unparkVehicle(Vehicle v,int departureTime) throws VehicleException, SimulationException {
+	public void unparkVehicle(Vehicle v, int departureTime) throws VehicleException, SimulationException {
 	}
 	
 	/**
@@ -318,7 +331,7 @@ public class CarPark {
 	 * @param target String holding finishing state of vehicle (Q,P,A) 
 	 * @return String containing transition in the form: |(S|C|M):(N|Q|P|A)>(Q|P|A)| 
 	 */
-	private String setVehicleMsg(Vehicle v,String source, String target) {
+	private String setVehicleMsg(Vehicle v, String source, String target) {
 		String str="";
 		if (v instanceof Car) {
 			if (((Car)v).isSmall()) {
