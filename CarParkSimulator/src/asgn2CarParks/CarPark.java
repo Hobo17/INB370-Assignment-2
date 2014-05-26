@@ -152,6 +152,7 @@ public class CarPark {
 	 * @throws VehicleException if one or more vehicles not in the correct state or if timing constraints are violated
 	 * @throws SimulationException 
 	 */
+<<<<<<< HEAD
 	public void archiveQueueFailures(int time) throws VehicleException, SimulationException {
 		Iterator<Vehicle> vehiclesIter = currentVehicles.iterator();
 				
@@ -169,6 +170,18 @@ public class CarPark {
 			}
 			
 			
+=======
+	public void archiveQueueFailures(int time) throws VehicleException {
+		if (!v.isQueued()) {
+			throw new VehicleException("This vehicle is not in the correct state.");
+		} else if () {
+			throw new VehicleException("Timing constraints have been violated: ");
+		} else {
+			this.exitQueue(v, time);
+			this.archivedVehicles.add(v);
+			numDissatisfied++;
+			this.status += setVehicleMsg(v, "Q", "A");
+>>>>>>> 982bdf93ffb6aaa249d1b6e085b233dd0e6f783d
 		}
 	}
 	
