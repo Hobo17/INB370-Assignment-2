@@ -12,8 +12,6 @@ package asgn2CarParks;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import asgn2Exceptions.SimulationException;
 import asgn2Exceptions.VehicleException;
@@ -58,13 +56,7 @@ public class CarPark {
 	private ArrayList<Vehicle> archivedVehicles;	// holds the archived vehicles
 	private ArrayList<Vehicle> queuedVehicles;		// holds the queued vehicles
 	
-	private int time;
-	private boolean force;
-	
-	private int exitTime;
-	private int arrivalTime;
-	private int departureTime;
-	private int parkingTime;
+	private String status;
 	
 	/**
 	 * CarPark constructor sets the basic size parameters. 
@@ -85,7 +77,7 @@ public class CarPark {
 	 */
 	public CarPark(int maxCarSpaces, int maxSmallCarSpaces, int maxMotorCycleSpaces, int maxQueueSize) {		
 		
-		// Set basic size parametres
+		// Set basic size parameters
 		this.maxCarParkSpaces = (maxCarSpaces + maxMotorCycleSpaces);
 		this.maxCarSpaces = maxCarSpaces;
 		this.maxBigCarSpaces = (maxCarSpaces - maxSmallCarSpaces);
@@ -93,18 +85,20 @@ public class CarPark {
 		this.maxMotorCycleSpaces = maxMotorCycleSpaces;
 		this.maxQueueSize = maxQueueSize;
 		
-		// Set basic size parametres
+		// Set basic size parameters
 		this.numCars = 0;
 		this.numBigCars = (numCars - numSmallCars);
 		this.numSmallCars = 0;
 		this.numMotorCycles = 0;
 		this.numVehicles = (numCars + numMotorCycles);
 		this.numDissatisfied = 0;
+		this.status = "";
 		
 		// Initialise Arraylists
 		this.currentVehicles = new ArrayList<Vehicle>(this.maxCarParkSpaces);
 		this.archivedVehicles = new ArrayList<Vehicle>();
 		this.queuedVehicles = new ArrayList<Vehicle>(maxQueueSize);
+		
 	}
 
 	/**
@@ -116,16 +110,16 @@ public class CarPark {
 	 * @throws SimulationException if one or more departing vehicles are not in the car park when operation applied
 	 */
 	public void archiveDepartingVehicles(int time, boolean force) throws VehicleException, SimulationException {
-		Iterator<Vehicle> vehiclesIter = spaces.iterator();
+		Iterator<Vehicle> vehiclesIter = currentVehicles.iterator();
 		
 		while (vehiclesIter.hasNext()) {
-			Vehicle v = veh.next();
+			Vehicle v = vehiclesIter.next();
 			if (!v.isParked()) {
 				throw new VehicleException("This vehicle is not in the correct state.");
 			} else if (!this.currentVehicles.contains(v)) {
 				throw new SimulationException("This vehicle is not in the carpark.");
 			} else {
-				if (v.getDepartureTime == time || force) {
+				if (v.getDepartureTime() == time || force) {
 					this.archivedVehicles.add(v);
 					unparkVehicle(v, time);
 				}
@@ -143,7 +137,7 @@ public class CarPark {
 	 */
 	public void archiveNewVehicle(Vehicle v) throws SimulationException {
 		if (v.isQueued()) {
-			throw new SimulationExcption("This vehicle is currently queued.");
+			throw new SimulationException("This vehicle is currently queued.");
 		} else if (v.isParked()) {
 			throw new SimulationException("This vehicle is currently parked.");
 		} else {
@@ -156,13 +150,24 @@ public class CarPark {
 	 * Archive vehicles which have stayed in the queue too long 
 	 * @param time int holding current simulation time 
 	 * @throws VehicleException if one or more vehicles not in the correct state or if timing constraints are violated
+	 * @throws SimulationException 
 	 */
-	public void archiveQueueFailures(int time) throws VehicleException {
-		if (!v.isQueued()) {
-			throw new VehicleException("This vehicle is not in the correct state.");
-		} else if () {
-			throw new VehicleException("Timing constraints have been violated: ");
-		} else {
+	public void archiveQueueFailures(int time) throws VehicleException, SimulationException {
+		Iterator<Vehicle> vehiclesIter = currentVehicles.iterator();
+				
+		while(vehiclesIter.hasNext()){
+			Vehicle v = vehiclesIter.next();
+			
+			if (!v.isQueued()) {
+				throw new VehicleException("This vehicle is not in the correct state.");
+			} 			
+			
+			else if (time - v.getArrivalTime() > Constants.MAXIMUM_QUEUE_TIME) {
+				this.archivedVehicles.add(v);
+				this.exitQueue(v, time);
+				numDissatisfied++;
+			}
+			
 			
 		}
 	}
@@ -176,7 +181,7 @@ public class CarPark {
 	 */
 	public boolean carParkEmpty() {
 		if (this.numVehicles == 0) {
-			return true
+			return true;
 		} else {
 			return false;
 		}
@@ -205,7 +210,7 @@ public class CarPark {
 	public void enterQueue(Vehicle v) throws SimulationException, VehicleException {
 		if (this.queuedVehicles.size() == this.maxQueueSize) {
 			throw new SimulationException("The queue is full.");
-		} else if (v.isparked() || v.isQueued()) {
+		} else if (v.isParked() || v.isQueued()) {
 			throw new VehicleException("This vehicle is not in the correct state.");
 		} else {
 			this.queuedVehicles.add(v);
@@ -243,9 +248,9 @@ public class CarPark {
 	 */
 	public String finalState() {
 		String str = "Vehicles Processed: count:" + 
-				this.count + ", logged: " + this.past.size() 
+				this.numVehicles + ", logged: " + this.archivedVehicles.size() 
 				+ "\nVehicle Record: \n";
-		for (Vehicle v : this.past) {
+		for (Vehicle v : this.archivedVehicles) {
 			str += v.toString() + "\n\n";
 		}
 		return str + "\n";
@@ -291,14 +296,15 @@ public class CarPark {
 	 */
 	public String getStatus(int time) {
 		String str = time +"::"
-		+ this.count + "::" 
-		+ "P:" + this.spaces.size() + "::"
+		+ this.numVehicles + "::" 
+		+ "P:" + this.currentVehicles.size() + "::"
 		+ "C:" + this.numCars + "::S:" + this.numSmallCars 
 		+ "::M:" + this.numMotorCycles 
 		+ "::D:" + this.numDissatisfied 
-		+ "::A:" + this.past.size()  
-		+ "::Q:" + this.queue.size(); 
-		for (Vehicle v : this.queue) {
+		+ "::A:" + this.archivedVehicles.size()  
+		+ "::Q:" + this.queuedVehicles.size(); 
+		
+		for (Vehicle v : this.queuedVehicles) {
 			if (v instanceof Car) {
 				if (((Car)v).isSmall()) {
 					str += "S";
@@ -309,6 +315,7 @@ public class CarPark {
 				str += "M";
 			}
 		}
+		
 		str += this.status;
 		this.status="";
 		return str+"\n";
