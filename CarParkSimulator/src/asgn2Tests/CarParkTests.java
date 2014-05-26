@@ -258,9 +258,6 @@ public class CarParkTests {
 	@Test
 	public void testCarParkFullTrue() throws VehicleException, SimulationException {		
 		for (int i = 0; i < MAX_CAR_SPACES; i++) {
-//TODO
-	//You can't park the same vehicle several times as I believe that will cause
-	//an exception in the method, a loop is required. - DONE
 			Car car = new Car("C" + i, ARRIVAL_TIME + 1, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME + 1, INTENDED_DURATION);
 		}
@@ -305,7 +302,6 @@ public class CarParkTests {
 	@Test(expected=SimulationException.class)
 	public void testEnterQueueFull() throws SimulationException, VehicleException {
 		for (int i = 0; i < (MAX_QUEUE_SIZE + 1); i++) {
-			//TODO: See above TODO - Create car inside loop not outside - DONE
 			Car car = new Car("C" + i, ARRIVAL_TIME + 1, NOT_SMALL);
 			carpark.enterQueue(car);
 		}
@@ -433,7 +429,6 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testGetNumCarsMultiple() throws VehicleException, SimulationException {
-		//TODO: See above TODO - Create car inside loop not outside - DONE
 		
 		// Add two big cars to the carpark
 		for (i = 0; i < 2; i++) {
@@ -484,7 +479,6 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testGetNumMotorCyclesMultiple() throws VehicleException, SimulationException {
-		//TODO: See above TODO - Create car inside loop not outside - DONE
 		
 		// Add two big cars to the carpark
 		for (i = 0; i < 2; i++) {
@@ -535,7 +529,6 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testGetNumSmallCarsMultiple() throws VehicleException, SimulationException {
-		//TODO: See above TODO - DONE
 
 		// Add two big cars to the carpark
 		for (i = 0; i < 2; i++) {
@@ -575,7 +568,6 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testGetNumVehiclesInQueueMultiple() throws VehicleException, SimulationException {
-		//TODO: See above TODO - DONE
 		
 		// Add three big cars to the queue
 		for (i = 0; i < 3; i++) {
@@ -721,7 +713,6 @@ public class CarParkTests {
 	 */
 	@Test(expected=SimulationException.class)
 	public void testProcessQueueBigCarNoSpaces() throws SimulationException, VehicleException {
-		//TODO: See above TODO - Create car inside loop not outside - DONE
 		for (int i = 0; i < (MAX_CAR_SPACES); i++) {
 			this.car = new Car("C" + i, ONE, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
@@ -738,7 +729,6 @@ public class CarParkTests {
 	 */
 	@Test(expected=SimulationException.class)
 	public void testProcessQueueSmallCarNoSpaces() throws SimulationException, VehicleException {	
-		//TODO: See above TODO - Create car inside loop not outside - DONE
 		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + MAX_CAR_SPACES); i++) {
 			this.car = new Car("C" + i, ONE, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
@@ -756,7 +746,6 @@ public class CarParkTests {
 	@Test(expected=SimulationException.class)
 	public void testProcessQueueMotorCycleNoSpaces() throws SimulationException, VehicleException {	
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES); i++) {
-			//TODO: See above TODO - Create car inside loop not outside - DONE
 			this.moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
@@ -873,7 +862,6 @@ public class CarParkTests {
 	@Test
 	public void testQueueFullTrue() throws VehicleException, SimulationException {
 		for (int i = 0; i < MAX_QUEUE_SIZE; i++) {
-			//TODO: See above TODO - Create car inside loop not outside - DONE
 			this.car = new Car("C" + i, ONE, SMALL);
 			carpark.enterQueue(car);
 		}
@@ -915,7 +903,6 @@ public class CarParkTests {
 	@Test
 	public void testSpacesAvailableFalseBigCar() throws VehicleException, SimulationException {
 		for (int i = 0; i < MAX_CAR_SPACES; i++) {
-			//TODO: See above TODO - Create car inside loop not outside - DONE
 			this.car = new Car("C" + i, ONE, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
@@ -941,7 +928,6 @@ public class CarParkTests {
 	@Test
 	public void testSpacesAvailableFalseSmallCar() throws VehicleException, SimulationException {
 		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + MAX_CAR_SPACES); i++) {
-			//TODO: See above TODO - Create car inside loop not outside - DONE
 			this.car = new Car("C" + i, ONE, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
@@ -967,7 +953,6 @@ public class CarParkTests {
 	@Test
 	public void testSpacesAvailableFalseMotorcycle() throws VehicleException, SimulationException {
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES); i++) {
-			//TODO: See above TODO - Create car inside loop not outside - DONE
 			this.moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
@@ -986,7 +971,6 @@ public class CarParkTests {
 	@Test(expected=SimulationException.class)
 	public void testTryProcessNewVehiclesBigCar() throws SimulationException, VehicleException {	
 		for (int i = 0; i < MAX_CAR_SPACES; i++) {
-			//TODO: See above TODO - Create car inside loop not outside - DONE
 			this.car = new Car("C" + i, ONE, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
@@ -1001,7 +985,6 @@ public class CarParkTests {
 	@Test(expected=SimulationException.class)
 	public void testTryProcessNewVehiclesSmallCar() throws SimulationException, VehicleException {
 		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + MAX_CAR_SPACES); i++) {
-			//TODO: See above TODO - Create car inside loop not outside - DONE
 			this.car = new Car("C" + i, ONE, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
@@ -1016,7 +999,6 @@ public class CarParkTests {
 	@Test(expected=SimulationException.class)
 	public void testTryProcessNewVehiclesMotorcycle() throws SimulationException, VehicleException {
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES); i++) {
-			//TODO: See above TODO - Create car inside loop not outside - DONE
 			this.moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
