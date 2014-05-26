@@ -165,6 +165,7 @@ public class CarPark {
 		} else {
 			this.exitQueue(v, time);
 			this.archivedVehicles.add(v);
+			numDissatisfied++;
 			this.status += setVehicleMsg(v, "Q", "A");
 		}
 	}
