@@ -116,18 +116,30 @@ public class CarPark {
 	 * @throws SimulationException if one or more departing vehicles are not in the car park when operation applied
 	 */
 	public void archiveDepartingVehicles(int time, boolean force) throws VehicleException, SimulationException {
+		if (!v.isParked()) {
+			throw new VehicleException("This vehicle is not in the correct state.");
+		} else if (!this.spaces.contains(v)) {
+			throw new SimulationException("This vehicle is not in the carpark.");
+		} else {
+			
+		}
 	}
 		
 	/**
 	 * Method to archive new vehicles that don't get parked or queued and are turned 
 	 * away
-	 * 
-	 * ****unsatisfied customer****
-	 * 
 	 * @param v Vehicle to be archived
 	 * @throws SimulationException if vehicle is currently queued or parked
 	 */
 	public void archiveNewVehicle(Vehicle v) throws SimulationException {
+		if (v.isQueued()) {
+			throw new SimulationExcption("This vehicle is currently queued.");
+		} else if (v.isParked()) {
+			throw new SimulationException("This vehicle is currently parked.");
+		} else {
+			this.archivedVehicles.add(v);
+			numDissatisfied++;
+		}
 	}
 	
 	/**
@@ -136,6 +148,13 @@ public class CarPark {
 	 * @throws VehicleException if one or more vehicles not in the correct state or if timing constraints are violated
 	 */
 	public void archiveQueueFailures(int time) throws VehicleException {
+		if (!v.isQueued()) {
+			throw new VehicleException("This vehicle is not in the correct state.");
+		} else if () {
+			throw new VehicleException("Timing constraints have been violated: ");
+		} else {
+			
+		}
 	}
 	
 	/**
@@ -174,6 +193,14 @@ public class CarPark {
 	 * @throws VehicleException if vehicle not in the correct state 
 	 */
 	public void enterQueue(Vehicle v) throws SimulationException, VehicleException {
+		if (this.queuedVehicles.size() == this.maxQueueSize) {
+			throw new SimulationException("The queue is full.");
+		} else if (v.isparked() || v.isQueued()) {
+			throw new VehicleException("This vehicle is not in the correct state.");
+		} else {
+			this.queuedVehicles.add(v);
+			v.enterQueuedState();
+		}
 	}
 	
 	
@@ -187,6 +214,16 @@ public class CarPark {
 	 * constraints are violated
 	 */
 	public void exitQueue(Vehicle v, int exitTime) throws SimulationException, VehicleException {
+		if (!this.queuedVehicles.contains(v)) {
+			throw new SimulationException("This vehicle is not in the queue.");
+		} else if (!v.isQueued()) {
+			throw new VehicleException("This vehicle is in an incorrect state.");
+		} else if (exitTime > (v.getArrivalTime() + exitTime)) {
+			throw new VehicleException("Timing constraints have been violated: The exit time must be later than the arrival time.");
+		} else {
+			this.queuedVehicles.remove(v);
+			v.exitQueuedState(exitTime);
+		}
 	}
 	
 	/**
@@ -299,6 +336,7 @@ public class CarPark {
 	 * @throws VehicleException if vehicle not in the correct state or timing constraints are violated
 	 */
 	public void parkVehicle(Vehicle v, int time, int intendedDuration) throws SimulationException, VehicleException {
+		
 	}
 
 	/**
