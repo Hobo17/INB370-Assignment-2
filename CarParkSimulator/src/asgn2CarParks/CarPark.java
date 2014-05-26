@@ -163,7 +163,9 @@ public class CarPark {
 		} else if () {
 			throw new VehicleException("Timing constraints have been violated: ");
 		} else {
-			
+			this.exitQueue(v, time);
+			this.archivedVehicles.add(v);
+			this.status += setVehicleMsg(v, "Q", "A");
 		}
 	}
 	
