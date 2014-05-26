@@ -54,7 +54,7 @@ public class CarPark {
 	private int numVehicles;			// number of vehicles in the carpark, including big cars, small cars, and motorcycles
 	private int numDissatisfied;		// number of dissatisfied customers
 	
-	private ArrayList<Vehicle> spaces;				// holds vehicles currently in the carpark
+	private ArrayList<Vehicle> currentVehicles;				// holds vehicles currently in the carpark
 	private ArrayList<Vehicle> archivedVehicles;	// holds the archived vehicles
 	private ArrayList<Vehicle> queuedVehicles;		// holds the queued vehicles
 	
@@ -102,26 +102,36 @@ public class CarPark {
 		this.numDissatisfied = 0;
 		
 		// Initialise Arraylists
-		this.spaces = new ArrayList<Vehicle>(this.maxCarParkSpaces);
+		this.currentVehicles = new ArrayList<Vehicle>(this.maxCarParkSpaces);
 		this.archivedVehicles = new ArrayList<Vehicle>();
 		this.queuedVehicles = new ArrayList<Vehicle>(maxQueueSize);
 	}
 
 	/**
 	 * Archives vehicles exiting the car park after a successful stay. Includes transition via 
-	 * Vehicle.exitParkedState(). 
+	 * Vehicle.exitParkedState().
 	 * @param time int holding time at which vehicle leaves
 	 * @param force boolean forcing departure to clear car park 
 	 * @throws VehicleException if vehicle to be archived is not in the correct state 
 	 * @throws SimulationException if one or more departing vehicles are not in the car park when operation applied
 	 */
 	public void archiveDepartingVehicles(int time, boolean force) throws VehicleException, SimulationException {
-		if (!v.isParked()) {
-			throw new VehicleException("This vehicle is not in the correct state.");
-		} else if (!this.spaces.contains(v)) {
-			throw new SimulationException("This vehicle is not in the carpark.");
-		} else {
+		Iterator<Vehicle> vehiclesIter = spaces.iterator();
+		
+		while (vehiclesIter.hasNext()) {
+			Vehicle v = veh.next();
+			if (!v.isParked()) {
+				throw new VehicleException("This vehicle is not in the correct state.");
+			} else if (!this.currentVehicles.contains(v)) {
+				throw new SimulationException("This vehicle is not in the carpark.");
+			} else {
+				if (v.getDepartureTime == time || force) {
+					this.archivedVehicles.add(v);
+					unparkVehicle(v, time);
+				}
 			
+			
+			}
 		}
 	}
 		
