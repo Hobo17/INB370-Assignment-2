@@ -40,10 +40,23 @@ import asgn2Vehicles.Vehicle;
  */
 public class CarPark {
 
-	private int maxCarSpaces;
-	private int maxSmallCarSpaces;
-	private int maxMotorCycleSpaces;
-	private int maxQueueSize;
+	private int maxCarParkSpaces;		// max number of spaces in the carpark
+	private int maxCarSpaces;			// max number of car spaces, including small cars
+	private int maxBigCarSpaces;		// max number of big car spaces
+	private int maxSmallCarSpaces;		// max number of small car spaces
+	private int maxMotorCycleSpaces;	// max number of motorcycle spaces
+	private int maxQueueSize;			// max size of the queue
+	
+	private int numCars;				// number of cars in the carpark, including big and small cars
+	private int numBigCars;				// number of big cars in the carpark
+	private int numSmallCars;			// number of small cars in the carpark
+	private int numMotorCycles;			// number of motorcycles in the carpark
+	private int numVehicles;			// number of vehicles in the carpark, including big cars, small cars, and motorcycles
+	private int numDissatisfied;		// number of dissatisfied customers
+	
+	private ArrayList<Vehicle> spaces;				// holds vehicles currently in the carpark
+	private ArrayList<Vehicle> archivedVehicles;	// holds the archived vehicles
+	private ArrayList<Vehicle> queuedVehicles;		// holds the queued vehicles
 	
 	private int time;
 	private boolean force;
@@ -70,11 +83,28 @@ public class CarPark {
 	 * @param maxMotorCycleSpaces maximum number of spaces allocated to MotorCycles
 	 * @param maxQueueSize maximum number of vehicles allowed to queue
 	 */
-	public CarPark(int maxCarSpaces, int maxSmallCarSpaces, int maxMotorCycleSpaces, int maxQueueSize) {
+	public CarPark(int maxCarSpaces, int maxSmallCarSpaces, int maxMotorCycleSpaces, int maxQueueSize) {		
+		
+		// Set basic size parametres
+		this.maxCarParkSpaces = (maxCarSpaces + maxMotorCycleSpaces);
 		this.maxCarSpaces = maxCarSpaces;
+		this.maxBigCarSpaces = (maxCarSpaces - maxSmallCarSpaces);
 		this.maxSmallCarSpaces = maxSmallCarSpaces;
 		this.maxMotorCycleSpaces = maxMotorCycleSpaces;
 		this.maxQueueSize = maxQueueSize;
+		
+		// Set basic size parametres
+		this.numCars = 0;
+		this.numBigCars = (numCars - numSmallCars);
+		this.numSmallCars = 0;
+		this.numMotorCycles = 0;
+		this.numVehicles = (numCars + numMotorCycles);
+		this.numDissatisfied = 0;
+		
+		// Initialise Arraylists
+		this.spaces = new ArrayList<Vehicle>(this.maxCarParkSpaces);
+		this.archivedVehicles = new ArrayList<Vehicle>();
+		this.queuedVehicles = new ArrayList<Vehicle>(maxQueueSize);
 	}
 
 	/**
@@ -116,6 +146,11 @@ public class CarPark {
 	 * @return true if car park empty, false otherwise
 	 */
 	public boolean carParkEmpty() {
+		if (this.numVehicles == 0) {
+			return true
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -123,6 +158,11 @@ public class CarPark {
 	 * @return true if car park full, false otherwise
 	 */
 	public boolean carParkFull() {
+		if (this.numVehicles == this.maxCarParkSpaces) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
@@ -169,6 +209,7 @@ public class CarPark {
 	 * @return number of cars in car park, including small cars
 	 */
 	public int getNumCars() {
+		return this.numCars;
 	}
 	
 	/**
@@ -177,6 +218,7 @@ public class CarPark {
 	 * 		   a small car space
 	 */
 	public int getNumMotorCycles() {
+		return this.numMotorCycles;
 	}
 	
 	/**
@@ -185,6 +227,7 @@ public class CarPark {
 	 * 		   not occupying a small car space. 
 	 */
 	public int getNumSmallCars() {
+		return this.numSmallCars;
 	}
 	
 	/**
@@ -242,6 +285,7 @@ public class CarPark {
 	 * @return number of vehicles in the queue
 	 */
 	public int numVehiclesInQueue() {
+		return this.queuedVehicles.size();
 	}
 	
 	/**
@@ -275,6 +319,11 @@ public class CarPark {
 	 * @return true if queue empty, false otherwise
 	 */
 	public boolean queueEmpty() {
+		if (this.queuedVehicles.size() == 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -282,6 +331,11 @@ public class CarPark {
 	 * @return true if queue full, false otherwise
 	 */
 	public boolean queueFull() {
+		if (this.queuedVehicles.size() == this.maxQueueSize) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
