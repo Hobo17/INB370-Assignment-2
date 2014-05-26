@@ -24,7 +24,7 @@ import asgn2Vehicles.MotorCycle;
 import asgn2Vehicles.Car;
 
 /**
- * @author Bec
+ * @author Rebecca Zanchetta (n8300941)
  *
  */
 public class CarParkTests {

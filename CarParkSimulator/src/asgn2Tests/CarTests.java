@@ -55,7 +55,7 @@ public class CarTests {
 	 * Test method for {@link asgn2Vehicles.Car#Car(java.lang.String, int, boolean)}
 	 * with car arriving before 0
 	 * @throws asgn2.Exceptions.VehicleException
-	 * @author Bec
+	 * @author Rebecca Zanchetta (n8300941)
 	 */
 	@Test(expected=VehicleException.class)
 	public void testCarArriveBelowZero() throws VehicleException {

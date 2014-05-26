@@ -20,7 +20,7 @@ import asgn2Simulators.Constants;
 import asgn2Vehicles.MotorCycle;
 
 /**
- * @author Brad
+ * @author Brad Vose (n8280282)
  *
  */
 public class MotorCycleTests {
@@ -80,7 +80,7 @@ public class MotorCycleTests {
 	 * {@link asgn2Vehicles.MotorCycle#MotorCycle(java.lang.String, int)}
 	 * with arrive time at 1
 	 * @throws asgn.Exceptions.VehicleException
-	 * @author Bec
+	 * @author Rebecca Zanchetta (n8300941)
 	 */
 	@Test
 	public void testMotoArriveAfterZero() throws VehicleException {
