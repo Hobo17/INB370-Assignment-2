@@ -40,26 +40,26 @@ import asgn2Vehicles.Vehicle;
  */
 public class CarPark {
 
-	private int maxCarParkSpaces; // max number of spaces in the car park
-	private int maxCarSpaces; // max number of car spaces, including small cars
-	private int maxBigCarSpaces; // max number of big car spaces
-	private int maxSmallCarSpaces; // max number of small car spaces
+	private int maxCarParkSpaces; 	// max number of spaces in the car park
+	private int maxCarSpaces; 		// max number of car spaces, including small cars
+	private int maxBigCarSpaces; 	// max number of big car spaces
+	private int maxSmallCarSpaces; 	// max number of small car spaces
 	private int maxMotorCycleSpaces; // max number of motorcycle spaces
-	private int maxQueueSize; // max size of the queue
+	private int maxQueueSize; 		// max size of the queue
 
-	private int numCars; // number of cars in the car park, including big and
-							// small cars
-	private int numSmallCars; // number of small cars in the car park
+	private int numCars; 		// number of cars in the car park, including big and
+								// small cars
+	private int numSmallCars; 	// number of small cars in the car park
 	private int numMotorCycles; // number of motorcycles in the car park
-	private int numVehicles; // number of vehicles in the car park, including big
+	private int numVehicles; 	// number of vehicles in the car park, including big
 								// cars, small cars, and motorcycles
-	private int numVehTotal; // Includes all vehicles including newly made vehicles
+	private int numVehTotal; 	// Includes all vehicles including newly made vehicles
 	private int numDissatisfied; // number of dissatisfied customers
 
-	private ArrayList<Vehicle> currentVehicles; // holds vehicles currently in
-												// the car park
-	private ArrayList<Vehicle> archivedVehicles; // holds the archived vehicles
-	private ArrayList<Vehicle> queuedVehicles; // holds the queued vehicles
+	private ArrayList<Vehicle> currentVehicles; 	// holds vehicles currently in
+													// the car park
+	private ArrayList<Vehicle> archivedVehicles; 	// holds the archived vehicles
+	private ArrayList<Vehicle> queuedVehicles; 		// holds the queued vehicles
 
 	private String status;
 
@@ -130,6 +130,7 @@ public class CarPark {
 	 */
 	public void archiveDepartingVehicles(int time, boolean force)
 			throws VehicleException, SimulationException {
+		
 		ArrayList<Vehicle> tempCurVehicles = new ArrayList<Vehicle>(currentVehicles);
 		Iterator<Vehicle> vehiclesIter = tempCurVehicles.iterator();
 
@@ -182,7 +183,8 @@ public class CarPark {
 	 */
 	public void archiveQueueFailures(int time) throws VehicleException,
 			SimulationException {
-		ArrayList<Vehicle> tempCurVehicles = new ArrayList<Vehicle>(currentVehicles);
+		
+		ArrayList<Vehicle> tempCurVehicles = new ArrayList<Vehicle>(queuedVehicles);
 		Iterator<Vehicle> vehiclesIter = tempCurVehicles.iterator();
 
 		while (vehiclesIter.hasNext()) {
@@ -203,9 +205,6 @@ public class CarPark {
 	}
 
 	/**
-	 * *****2 concerns in this method: archive, queue***** *****ie (current time
-	 * - arrival time) > max queue time*****
-	 * 
 	 * Simple status showing whether carPark is empty
 	 * 
 	 * @return true if car park empty, false otherwise
@@ -219,7 +218,7 @@ public class CarPark {
 	 * 
 	 * @return true if car park full, false otherwise
 	 */
-	public boolean carParkFull() {
+	public boolean carParkFull() {;
 		return(this.numVehicles == this.maxCarParkSpaces);
 	}
 
@@ -279,7 +278,7 @@ public class CarPark {
 	 * @return String containing dump of final car park state
 	 */
 	public String finalState() {
-		String str = "Vehicles Processed: count:" + this.numVehicles
+		String str = "Vehicles Processed: count:" + this.numVehTotal
 				+ ", logged: " + this.archivedVehicles.size()
 				+ "\nVehicle Record: \n";
 		for (Vehicle v : this.archivedVehicles) {
@@ -333,7 +332,7 @@ public class CarPark {
 	 * @return String containing current state
 	 */
 	public String getStatus(int time) {
-		String str = time + "::" + this.numVehicles + "::" + "P:"
+		String str = time + "::" + this.numVehTotal + "::" + "P:"
 				+ this.currentVehicles.size() + "::" + "C:" + this.numCars
 				+ "::S:" + this.numSmallCars + "::M:" + this.numMotorCycles
 				+ "::D:" + this.numDissatisfied + "::A:"
@@ -406,9 +405,9 @@ public class CarPark {
 					"The vehicle is not in the correct state.");
 		}
 
+		numVehicles++;
 		this.currentVehicles.add(v);
 		v.enterParkedState(time, intendedDuration);
-		numVehicles++;
 
 		if (v instanceof Car) {
 			numCars++;
@@ -435,6 +434,7 @@ public class CarPark {
 	 */
 	public void processQueue(int time, Simulator sim) throws VehicleException,
 			SimulationException {
+		
 		ArrayList<Vehicle> tempQuedVehicles = new ArrayList<Vehicle>(queuedVehicles);
 		Iterator<Vehicle> vehiclesIter = tempQuedVehicles.iterator();
 
@@ -457,9 +457,6 @@ public class CarPark {
 	}
 
 	/**
-	 * ****if there are no spaces available in the car park, park the cars in the
-	 * queue****
-	 * 
 	 * Simple status showing whether queue is empty
 	 * 
 	 * @return true if queue empty, false otherwise
@@ -547,25 +544,24 @@ public class CarPark {
 	 * @throws VehicleException
 	 *             if vehicle creation violates constraints
 	 */
-	public void tryProcessNewVehicles(int time, Simulator sim) throws VehicleException, SimulationException {
+	public void tryProcessNewVehicles(int time, Simulator sim)
+			throws VehicleException, SimulationException {
 		
 		Vehicle newVehicle;
 		
 		if (sim.newCarTrial()) {
-			numVehTotal++;
 			
 			if (sim.smallCarTrial()) {
-				newVehicle = new Car("C" + numSmallCars, time, true);
+				newVehicle = new Car("C" + (numVehTotal + 1), time, true);
 				processNewVehicle(newVehicle, time, sim);
 			} else {
-				newVehicle = new Car("C" + numCars, time, false);
+				newVehicle = new Car("C" + (numVehTotal + 1), time, false);
 				processNewVehicle(newVehicle, time, sim);
 			}
 		}
 		
 		if (sim.motorCycleTrial()) {
-			numVehTotal++;
-			newVehicle = new MotorCycle("M" + numMotorCycles, time);
+			newVehicle = new MotorCycle("MC" + (numVehTotal + 1), time);
 			processNewVehicle(newVehicle, time, sim);
 		}
 		
@@ -585,10 +581,8 @@ public class CarPark {
 	 * @throws VehicleException
 	 *             if vehicle creation violates constraints
 	 */
-	private void processNewVehicle(Vehicle v, int time, Simulator sim) throws VehicleException, SimulationException {
-		if (!this.spacesAvailable(v)) {
-			throw new SimulationException("There are no spaces available for this type of vehicle.");
-		} 
+	private void processNewVehicle(Vehicle v, int time, Simulator sim)
+			throws VehicleException, SimulationException {
 		
 		if (this.spacesAvailable(v)) {
 			this.parkVehicle(v,  time,  sim.setDuration());
@@ -600,6 +594,9 @@ public class CarPark {
 			this.archiveNewVehicle(v);
 			this.status += setVehicleMsg(v, "N", "A");
 		}
+
+		numVehicles++;
+		numVehTotal++;
 		
 	}
 
@@ -616,19 +613,21 @@ public class CarPark {
 	 * @throws SimulationException
 	 *             if vehicle is not in car park
 	 */
-	public void unparkVehicle(Vehicle v, int departureTime) throws VehicleException, SimulationException {
+	public void unparkVehicle(Vehicle v, int departureTime)
+			throws VehicleException, SimulationException {
+		
 		if (!v.isParked()) {
 			throw new VehicleException("The vehicle is not parked.");
 		} else if (v.isQueued()) {
 			throw new VehicleException("The vehicle is in a queue.");
 		} else if (v.getArrivalTime() > departureTime) {
-			throw new VehicleException("Timing constraints have been violated: The departure time must be later than the arrival time");
+			throw new VehicleException("Timing constraints have been violated:"
+					+ "The departure time must be later than the arrival time");
 		} else if (!this.currentVehicles.contains(v)) {
 			throw new SimulationException("This vehicle is not in the carpark.");
 		}
 		
 		this.currentVehicles.remove(v);
-		this.archivedVehicles.add(v);
 		v.exitParkedState(departureTime);
 		this.status += setVehicleMsg(v, "P", "A");
 		
@@ -640,6 +639,7 @@ public class CarPark {
 		} else if(v instanceof MotorCycle) {
 			this.numMotorCycles--;
 		}
+		numVehicles--;
 		
 	}
 

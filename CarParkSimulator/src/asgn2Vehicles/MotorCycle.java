@@ -23,16 +23,21 @@ public class MotorCycle extends Vehicle {
 
 	/**
 	 * MotorCycle constructor 
-	 * @param vehID - identification number or plate of the vehicle
-	 * @param arrivalTime - time (minutes) at which the vehicle arrives and is 
-	 *        either queued or given entry to the carpark 
-	 * @throws VehicleException if arrivalTime is <= 0  
+	 * 
+	 * @param vehID
+	 *            identification number or plate of the vehicle
+	 * @param arrivalTime
+	 *            time (minutes) at which the vehicle arrives and is 
+	 *        either queued or given entry to the car park 
+	 * @throws VehicleException
+	 *            if arrivalTime is <= 0  
 	 */
 	public MotorCycle(String vehID, int arrivalTime) throws VehicleException {
 		super(vehID, arrivalTime);
 		
 		if(arrivalTime <= 0){  // Not really required because of super's check?
-			throw new VehicleException ("The arrivalTime must be greater than 0. (" + arrivalTime + ")");
+			throw new VehicleException ("The arrivalTime must be greater than 0. "
+					+ "(" + arrivalTime + ")");
 		}
 	}
 }

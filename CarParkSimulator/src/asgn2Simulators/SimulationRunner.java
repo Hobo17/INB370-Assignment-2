@@ -83,15 +83,42 @@ public class SimulationRunner {
 		CarPark cp = new CarPark();
 		Simulator s = null;
 		Log l = null; 
-		try {
-			s = new Simulator();
-			l = new Log();
-		} catch (IOException | SimulationException e1) {
-			e1.printStackTrace();
-			System.exit(-1);
-		}
 		
-		//TODO: Implement Argument Processing 
+		if(args.length == 9){
+			int     maxCarSpaces 		= Integer.parseInt(args[0]),
+					maxSmallCarSpaces 	= Integer.parseInt(args[1]),
+					maxMotorCycleSpaces = Integer.parseInt(args[2]),
+					maxQueueSize 		= Integer.parseInt(args[3]);
+			
+			cp = new CarPark(maxCarSpaces, maxSmallCarSpaces, 
+					maxMotorCycleSpaces, maxQueueSize);
+			
+			int seed = Integer.parseInt(args[5]);
+			double	meanStay = Double.parseDouble(args[8]),
+					carProb = Double.parseDouble(args[5]),
+					smallCarProb = Double.parseDouble(args[6]),
+					mcProb = Double.parseDouble(args[7]);
+			
+			try{
+				s = new Simulator(seed, meanStay, meanStay/3, carProb, smallCarProb, mcProb);
+				l = new Log();
+			} catch (IOException | SimulationException e1) {
+				e1.printStackTrace();
+				System.exit(-1);
+			}
+			
+		} else if(args.length == 0){
+			try {
+				s = new Simulator();
+				l = new Log();
+			} catch (IOException | SimulationException e1) {
+				e1.printStackTrace();
+				System.exit(-1);
+			}
+			
+		} else{
+			System.out.println("Invalid parameters given.");
+		}		
 		
 		//Run the simulation 
 		SimulationRunner sr = new SimulationRunner(cp,s,l);

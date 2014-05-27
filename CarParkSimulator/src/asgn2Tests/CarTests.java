@@ -123,29 +123,6 @@ public class CarTests {
 				"\nCustomer was satisfied");
 	}
 	
-	/**
-	 * Test method for {@link asgn2Vehicles.Car#toString()}.
-	 * @throws asgn2.Exceptions.VehicleException
-	 */
-	@Test
-	public void testToStringSmallCar() throws VehicleException {
-		car = new Car(VEH_ID, NORMAL_ARRIVE_TIME, true);
-		
-		car.enterQueuedState();
-		car.exitQueuedState(NORMAL_EXIT_TIME);
-		car.enterParkedState(NORMAL_PARKING_TIME, NORMAL_INTENDED_DURATION);
-		car.exitParkedState(NORMAL_DEPARTURE_TIME);
-		assertEquals(car.toString(), "Vehicle vehID: " + car.getVehID() + 
-				"\nArrival Time: " + car.getArrivalTime() + 
-				"\nExit from Queue: " + car.getParkingTime() +
-				"\nQueuing Time: " + (car.getParkingTime() - car.getArrivalTime()) +
-				"\nEntry to Car Park: " + car.getParkingTime() +
-				"\nExit from Car Park: " + car.getDepartureTime() +
-				"\nParking Time: " + (car.getDepartureTime() - car.getParkingTime()) +
-				"\nCustomer was satisfied" + 
-				"\nCar can use small parking space");
-	}
-	
 	//////////////////////////////////////////////////////////////////////////
 	// isSmall tests
 	//////////////////////////////////////////////////////////////////////////
