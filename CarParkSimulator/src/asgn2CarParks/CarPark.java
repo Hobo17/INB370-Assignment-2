@@ -40,24 +40,24 @@ import asgn2Vehicles.Vehicle;
  */
 public class CarPark {
 
-	private int maxCarParkSpaces; // max number of spaces in the carpark
+	private int maxCarParkSpaces; // max number of spaces in the car park
 	private int maxCarSpaces; // max number of car spaces, including small cars
 	private int maxBigCarSpaces; // max number of big car spaces
 	private int maxSmallCarSpaces; // max number of small car spaces
 	private int maxMotorCycleSpaces; // max number of motorcycle spaces
 	private int maxQueueSize; // max size of the queue
 
-	private int numCars; // number of cars in the carpark, including big and
+	private int numCars; // number of cars in the car park, including big and
 							// small cars
-	private int numSmallCars; // number of small cars in the carpark
-	private int numMotorCycles; // number of motorcycles in the carpark
-	private int numVehicles; // number of vehicles in the carpark, including big
+	private int numSmallCars; // number of small cars in the car park
+	private int numMotorCycles; // number of motorcycles in the car park
+	private int numVehicles; // number of vehicles in the car park, including big
 								// cars, small cars, and motorcycles
 	private int numVehTotal; // Includes all vehicles including newly made vehicles
 	private int numDissatisfied; // number of dissatisfied customers
 
 	private ArrayList<Vehicle> currentVehicles; // holds vehicles currently in
-												// the carpark
+												// the car park
 	private ArrayList<Vehicle> archivedVehicles; // holds the archived vehicles
 	private ArrayList<Vehicle> queuedVehicles; // holds the queued vehicles
 
@@ -273,10 +273,10 @@ public class CarPark {
 	}
 
 	/**
-	 * State dump intended for use in logging the final state of the carpark All
+	 * State dump intended for use in logging the final state of the car park All
 	 * spaces and queue positions should be empty and so we dump the archive
 	 * 
-	 * @return String containing dump of final carpark state
+	 * @return String containing dump of final car park state
 	 */
 	public String finalState() {
 		String str = "Vehicles Processed: count:" + this.numVehicles
@@ -358,10 +358,10 @@ public class CarPark {
 	}
 
 	/**
-	 * State dump intended for use in logging the initial state of the carpark.
+	 * State dump intended for use in logging the initial state of the car park.
 	 * Mainly concerned with parameters.
 	 * 
-	 * @return String containing dump of initial carpark state
+	 * @return String containing dump of initial car park state
 	 */
 	public String initialState() {
 		return "CarPark [maxCarSpaces: " + this.maxCarSpaces
@@ -457,7 +457,7 @@ public class CarPark {
 	}
 
 	/**
-	 * ****if there are no spaces available in the carpark, park the cars in the
+	 * ****if there are no spaces available in the car park, park the cars in the
 	 * queue****
 	 * 
 	 * Simple status showing whether queue is empty
@@ -496,6 +496,7 @@ public class CarPark {
 	 */
 	public boolean spacesAvailable(Vehicle v) {
 		int exMC = Math.max(0, getNumMotorCycles() - maxMotorCycleSpaces);
+		int exSC = Math.max(0, getNumSmallCars() - maxSmallCarSpaces);
 		
 		int availMC = Math.max(0, maxMotorCycleSpaces - getNumMotorCycles());
 		int availSC = Math.max(0, maxSmallCarSpaces - getNumSmallCars() - exMC);
@@ -506,7 +507,7 @@ public class CarPark {
 					return true;
 			}
 			
-			if(getNumCars() < this.maxBigCarSpaces)
+			if((getNumCars() - getNumSmallCars()) + exSC < this.maxBigCarSpaces)
 				return true;
 		}
 		else if(v instanceof MotorCycle){
@@ -603,7 +604,7 @@ public class CarPark {
 	}
 
 	/**
-	 * Method to remove vehicle from the carpark. For symmetry with parkVehicle,
+	 * Method to remove vehicle from the car park. For symmetry with parkVehicle,
 	 * include transition via Vehicle.exitParkedState. So vehicle should be in
 	 * parked state prior to entry to this method.
 	 * 

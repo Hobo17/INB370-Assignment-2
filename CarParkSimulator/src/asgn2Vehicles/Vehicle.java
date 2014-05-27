@@ -27,7 +27,7 @@ import asgn2Simulators.Constants;
  * respect this constraint. 
  * 
  * Vehicles are created in a neutral state. If the vehicle is unable to park or queue, then no changes 
- * are needed if the vehicle leaves the carpark immediately.
+ * are needed if the vehicle leaves the car park immediately.
  * Vehicles that remain and can't park enter a queued state via {@link #enterQueuedState() enterQueuedState} 
  * and leave the queued state via {@link #exitQueuedState(int) exitQueuedState}. 
  * Note that an exception is thrown if an attempt is made to join a queue when the vehicle is already 
@@ -225,7 +225,7 @@ public abstract class Vehicle {
 	 * @return true if satisfied, false if never in parked state or if queuing time exceeds max allowable 
 	 */
 	public boolean isSatisfied() {
-		return(this.previousStates.contains("P") || (!this.previousStates.contains("P") && (parkingTime - arrivalTime) <= Constants.MAXIMUM_QUEUE_TIME));
+		return(this.previousStates.contains("P") || (!this.previousStates.contains("P") && (exitTime - arrivalTime) <= Constants.MAXIMUM_QUEUE_TIME));
 	}
 	
 	/* (non-Javadoc)
