@@ -804,7 +804,6 @@ public class CarParkTests {
 	
 	/**
 	 * Test method for 
-<<<<<<< HEAD
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
 	@Test(expected=SimulationException.class)
@@ -819,15 +818,13 @@ public class CarParkTests {
 	
 	/**
 	 * Test method for 
-=======
->>>>>>> 982bdf93ffb6aaa249d1b6e085b233dd0e6f783d
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
 	@Test
 	public void testProcessQueueCorrectState() throws VehicleException, SimulationException {
 		carpark.enterQueue(car);
-		carpark.processQueue(ARRIVAL_TIME, sim);
+		carpark.processQueue(ARRIVAL_TIME + 1, sim);
 	}
 	
 	/**
@@ -838,7 +835,7 @@ public class CarParkTests {
 	@Test(expected=VehicleException.class)
 	public void testProcessQueueNewState() throws VehicleException, SimulationException {
 		this.car = new Car(VEH_ID, ONE, SMALL);
-		carpark.processQueue(ARRIVAL_TIME, sim);
+		carpark.processQueue(ARRIVAL_TIME + 1, sim);
 	}
 	
 	/**
@@ -849,7 +846,7 @@ public class CarParkTests {
 	@Test(expected=VehicleException.class)
 	public void testProcessQueueParkedState() throws VehicleException, SimulationException {
 		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
-		carpark.processQueue(ARRIVAL_TIME, sim);
+		carpark.processQueue(ARRIVAL_TIME + 1, sim);
 	}
 	
 	/**
