@@ -551,16 +551,16 @@ public class CarPark {
 		if (sim.newCarTrial()) {
 			
 			if (sim.smallCarTrial()) {
-				newVehicle = new Car("C" + numVehicles + 1, time, true);
+				newVehicle = new Car("C" + (numVehicles + 1), time, true);
 				processNewVehicle(newVehicle, time, sim);
 			} else {
-				newVehicle = new Car("C" + numVehicles + 1, time, false);
+				newVehicle = new Car("C" + (numVehicles + 1), time, false);
 				processNewVehicle(newVehicle, time, sim);
 			}
 		}
 		
 		if (sim.motorCycleTrial()) {
-			newVehicle = new MotorCycle("M" + numVehicles + 1, time);
+			newVehicle = new MotorCycle("MC" + (numVehicles + 1), time);
 			processNewVehicle(newVehicle, time, sim);
 		}
 		
