@@ -274,13 +274,13 @@ public class CarParkTests {
 		
 		// Fill all car spaces with small cars
 		for (int i = 0; i < MAX_CAR_SPACES; i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME + 1, INTENDED_DURATION);
 		}
 		
 		// Fill all motorcycle spaces with motorcycles
 		for (int i = 0; i < MAX_MOTORCYCLE_SPACES; i++) {
-			MotorCycle moto = new MotorCycle(VEH_ID, ARRIVAL_TIME);
+			moto = new MotorCycle(VEH_ID, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME + 1, INTENDED_DURATION);
 		}
 		// Assert that the car park is full
@@ -297,13 +297,13 @@ public class CarParkTests {
 		
 		// Fill all but one car spaces with small cars
 		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL_CAR_SPACES - 1); i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME + 1, INTENDED_DURATION);
 		}
 		
 		// Fill all motorcycle spaces with motorcycles
 		for (int i = 0; i < MAX_MOTORCYCLE_SPACES; i++) {
-			MotorCycle moto = new MotorCycle("MC" + i, ARRIVAL_TIME);
+			moto = new MotorCycle("MC" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME + 1, INTENDED_DURATION);
 		}
 		
@@ -335,7 +335,7 @@ public class CarParkTests {
 		
 		// Attempt to over fill the queue
 		for (int i = 0; i < (MAX_QUEUE_SIZE + 1); i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME + 1, NOT_SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME + 1, NOT_SMALL);
 			carpark.enterQueue(car);
 		}
 	}
@@ -468,18 +468,19 @@ public class CarParkTests {
 		
 		// Add two big cars to the car park
 		for (int i = 0; i < 2; i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
 		// Add two motorcycles to the car park
 		for (int i = 0; i < 2; i++) {
-			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
+			moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
 		// Add one small car to the car park
-		carpark.parkVehicle(this.car, ARRIVAL_TIME, INTENDED_DURATION);
+		car = new Car("C123", ARRIVAL_TIME, SMALL);
+		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		
 		assertEquals(carpark.getNumCars(), 3);
 	}
@@ -520,18 +521,19 @@ public class CarParkTests {
 		
 		// Add two big cars to the car park
 		for (int i = 0; i < 2; i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
 		// Add two motorcycles to the car park
 		for (int i = 0; i < 2; i++) {
-			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
+			moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
 		// Add one small car to the car park
-		carpark.parkVehicle(this.car, ARRIVAL_TIME, INTENDED_DURATION);
+		car = new Car("C123", ARRIVAL_TIME, SMALL);
+		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		
 		assertEquals(carpark.getNumMotorCycles(), 2);
 	}
@@ -557,7 +559,7 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testGetNumSmallCarsBigCarsOnly() throws VehicleException, SimulationException {
-		Car car = new Car(VEH_ID, ARRIVAL_TIME, NOT_SMALL);
+		car = new Car(VEH_ID, ARRIVAL_TIME, NOT_SMALL);
 		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		
 		assertEquals(carpark.getNumSmallCars(), 0);
@@ -574,18 +576,19 @@ public class CarParkTests {
 
 		// Add two big cars to the car park
 		for (int i = 0; i < 2; i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
 		// Add two motorcycles to the car park
 		for (int i = 0; i < 2; i++) {
-			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
+			moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
 		// Add one small car to the car park
-		carpark.parkVehicle(this.car, ARRIVAL_TIME, INTENDED_DURATION);
+		car = new Car("C123", ARRIVAL_TIME, SMALL);
+		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		
 		assertEquals(carpark.getNumSmallCars(), 1);
 	}
@@ -614,13 +617,13 @@ public class CarParkTests {
 		
 		// Add three big cars to the queue
 		for (int i = 0; i < 3; i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
 			carpark.enterQueue(car);
 		}
 		
 		// Add two motorcycles to the queue
 		for (int i = 0; i < 2; i++) {
-			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
+			moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.enterQueue(moto);
 		}
 		
@@ -641,7 +644,7 @@ public class CarParkTests {
 		
 		// Fill all big car spaces with big cars
 		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL_CAR_SPACES); i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 	}
@@ -656,7 +659,7 @@ public class CarParkTests {
 		
 		// Fill all car spaces (big and small) will small cars
 		for (int i = 0; i < MAX_CAR_SPACES; i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 	}
@@ -671,7 +674,7 @@ public class CarParkTests {
 		
 		// Fill all motorcycle and small car spaces with motorcycles
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES); i++) {
-			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
+			moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 	}
@@ -687,7 +690,7 @@ public class CarParkTests {
 		
 		// Attempt to over fill the big car spaces
 		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL_CAR_SPACES + 1); i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 	}
@@ -703,7 +706,7 @@ public class CarParkTests {
 		
 		// Attempt to over fill the car spaces with small cars
 		for (int i = 0; i < (MAX_CAR_SPACES + 1); i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 	}
@@ -719,7 +722,7 @@ public class CarParkTests {
 		
 		// Attempt to over fill the motorcycle and small car spaces with motorcycles
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES + 1); i++) {
-			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
+			moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 	}
@@ -761,11 +764,12 @@ public class CarParkTests {
 		
 		// Fill all small car spaces with small cars
 		for (int i = 0; i < Constants.DEFAULT_MAX_SMALL_CAR_SPACES; i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
 		// Attempt to park another small car
+		car = new Car("C123", ARRIVAL_TIME, SMALL);
 		carpark.parkVehicle(this.car, ARRIVAL_TIME, INTENDED_DURATION);
 
 	}
@@ -827,11 +831,12 @@ public class CarParkTests {
 		
 		// Fill all motorcycle and small car spaces with motorcycles
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + 1); i++) {
-			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
+			moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
 		// Attempt to process the queue when the next vehicle is a motorcycle
+		moto = new MotorCycle("M123", ARRIVAL_TIME);
 		carpark.enterQueue(moto);
 		carpark.processQueue(ARRIVAL_TIME + 1, sim);
 	}
@@ -933,7 +938,7 @@ public class CarParkTests {
 		
 		// Fill the queue with small cars
 		for (int i = 0; i < MAX_QUEUE_SIZE; i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, SMALL);
 			carpark.enterQueue(car);
 		}
 		assertTrue(carpark.queueFull());
@@ -978,11 +983,11 @@ public class CarParkTests {
 		
 		// Fill the big car spaces with big cars
 		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL_CAR_SPACES); i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
-		Car car = new Car("C", ARRIVAL_TIME, NOT_SMALL);
+		 car = new Car("C", ARRIVAL_TIME, NOT_SMALL);
 		assertFalse(carpark.spacesAvailable(car));
 	}
 	
@@ -1010,7 +1015,7 @@ public class CarParkTests {
 		
 		// Over fill the small car spaces
 		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + 3); i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
@@ -1029,7 +1034,7 @@ public class CarParkTests {
 		
 		// Fill all car spaces with small cars
 		for (int i = 0; i < (MAX_CAR_SPACES); i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
@@ -1048,13 +1053,13 @@ public class CarParkTests {
 		
 		// Over fill the small car spaces
 		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + 2); i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
 		// Fill the remaining car spaces with big cars
 		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL_CAR_SPACES - 2); i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
@@ -1087,7 +1092,7 @@ public class CarParkTests {
 		
 		// Over fill the motorcycle spaces
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + 3); i++) {
-			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
+			moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
@@ -1106,7 +1111,7 @@ public class CarParkTests {
 		
 		// Fill all motorcycle and small car spaces with motorcycles
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES); i++) {
-			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
+			moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
@@ -1125,14 +1130,14 @@ public class CarParkTests {
 		
 		// Over fill the motorcycle spaces
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + 2); i++) {
-			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
+			moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
 		// Fill the remaining small car spaces, and overflow into
 		// the big car spaces
 		for (int i = 0; i < (MAX_SMALL_CAR_SPACES); i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME, SMALL);
+			car = new Car("C" + i, ARRIVAL_TIME, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
@@ -1200,4 +1205,28 @@ public class CarParkTests {
 		carpark.unparkVehicle(car, DEPARTURE_TIME);
 	}
 
+	/**
+	 * Test method for satisfaction when rejected from the parking lot
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @throws asgn2.Exceptions.SimulationException
+	 */
+	@Test
+	public void testCarParkFullDissatisfied() throws VehicleException, SimulationException {	
+		
+		// Fill all car spaces with small cars
+		for (int i = 0; i < MAX_CAR_SPACES; i++) {
+			car = new Car("C" + i, ARRIVAL_TIME, SMALL);
+			carpark.parkVehicle(car, ARRIVAL_TIME + 1, INTENDED_DURATION);
+		}
+		
+		// Fill all motorcycle spaces with motorcycles
+		for (int i = 0; i < MAX_MOTORCYCLE_SPACES; i++) {
+			moto = new MotorCycle(VEH_ID, ARRIVAL_TIME);
+			carpark.parkVehicle(moto, ARRIVAL_TIME + 1, INTENDED_DURATION);
+		}
+		
+		car = new Car("C123", ARRIVAL_TIME, NOT_SMALL);
+		carpark.archiveNewVehicle(car);
+		assertFalse(car.isSatisfied());
+	}
 }
