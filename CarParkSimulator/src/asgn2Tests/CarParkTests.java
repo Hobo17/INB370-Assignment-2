@@ -189,6 +189,7 @@ public class CarParkTests {
 	public void testArchiveQueueFailuresUnparkedState() throws VehicleException, SimulationException {		
 		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		carpark.unparkVehicle(car, ARRIVAL_TIME + 10);
+		
 		carpark.archiveQueueFailures(DEPARTURE_TIME + 1);
 	}
 	
@@ -262,17 +263,21 @@ public class CarParkTests {
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
 	@Test
-	public void testCarParkFullTrue() throws VehicleException, SimulationException {		
+	public void testCarParkFullTrue() throws VehicleException, SimulationException {	
+		
+		// Fill all car spaces with small cars
 		for (int i = 0; i < MAX_CAR_SPACES; i++) {
 			Car car = new Car("C" + i, ARRIVAL_TIME + 1, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME + 1, INTENDED_DURATION);
 		}
 		
+		// Fill all motorcycle spaces with motorcycles
 		for (int i = 0; i < MAX_MOTORCYCLE_SPACES; i++) {
 			MotorCycle moto = new MotorCycle(VEH_ID, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME + 1, INTENDED_DURATION);
 		}
 		
+		// Assert that the carpark is full
 		assertTrue(carpark.carParkFull());
 	}
 	
@@ -283,16 +288,20 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testCarParkFullFalse() throws VehicleException, SimulationException {
+		
+		// Fil all but one car spaces with small cars
 		for (int i = 0; i < (MAX_CAR_SPACES - 1); i++) {
 			Car car = new Car("C" + i, ARRIVAL_TIME + 1, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME + 1, INTENDED_DURATION);
 		}
 		
+		// Fill all motorcycle spaces with mtorocycles
 		for (int i = 0; i < MAX_MOTORCYCLE_SPACES; i++) {
 			MotorCycle moto = new MotorCycle(VEH_ID, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME + 1, INTENDED_DURATION);
 		}
 		
+		// Assert that the carpark is not full
 		assertFalse(carpark.carParkFull());
 	}
 	
@@ -317,6 +326,8 @@ public class CarParkTests {
 	 */
 	@Test(expected=SimulationException.class)
 	public void testEnterQueueFull() throws SimulationException, VehicleException {
+		
+		// Attempt to overfill the queue
 		for (int i = 0; i < (MAX_QUEUE_SIZE + 1); i++) {
 			Car car = new Car("C" + i, ARRIVAL_TIME + 1, NOT_SMALL);
 			carpark.enterQueue(car);
@@ -461,7 +472,7 @@ public class CarParkTests {
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
-		// Add a small car to the carpark
+		// Add one small car to the carpark
 		carpark.parkVehicle(this.car, ARRIVAL_TIME, INTENDED_DURATION);
 		
 		assertEquals(carpark.getNumCars(), 3);
@@ -513,7 +524,7 @@ public class CarParkTests {
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
-		// Add a small car to the carpark
+		// Add one small car to the carpark
 		carpark.parkVehicle(this.car, ARRIVAL_TIME, INTENDED_DURATION);
 		
 		assertEquals(carpark.getNumMotorCycles(), 2);
@@ -542,6 +553,7 @@ public class CarParkTests {
 	public void testGetNumSmallCarsBigCarsOnly() throws VehicleException, SimulationException {
 		Car car = new Car(VEH_ID, ONE, NOT_SMALL);
 		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		
 		assertEquals(carpark.getNumSmallCars(), 0);
 	}
 	
@@ -566,7 +578,7 @@ public class CarParkTests {
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
-		// Add a small car to the carpark
+		// Add one small car to the carpark
 		carpark.parkVehicle(this.car, ARRIVAL_TIME, INTENDED_DURATION);
 		
 		assertEquals(carpark.getNumSmallCars(), 1);
@@ -620,7 +632,9 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testParkVehicleBigCar() throws VehicleException, SimulationException {
-		for (int i = 0; i < MAX_CAR_SPACES; i++) {
+		
+		// Fill all big car spaces with big cars
+		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL-CAR-SPACES); i++) {
 			Car car = new Car("C" + i, ONE, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
@@ -632,8 +646,10 @@ public class CarParkTests {
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
 	@Test
-	public void testParkVehicleSmallCar() throws VehicleException, SimulationException {		
-		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + MAX_CAR_SPACES); i++) {
+	public void testParkVehicleSmallCar() throws VehicleException, SimulationException {
+		
+		// Fill all car spaces (big and small) will small cars
+		for (int i = 0; i < (MAX_CAR_SPACES); i++) {
 			Car car = new Car("C" + i, ONE, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
@@ -645,7 +661,9 @@ public class CarParkTests {
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
 	@Test
-	public void testParkVehicleMotorCycle() throws VehicleException, SimulationException {		
+	public void testParkVehicleMotorCycle() throws VehicleException, SimulationException {
+		
+		// Fill all motorcycle and small car spaces with motorcycles
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES); i++) {
 			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
@@ -659,8 +677,10 @@ public class CarParkTests {
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
 	@Test(expected=SimulationException.class)
-	public void testParkVehicleBigCarNoSpaces() throws SimulationException, VehicleException {		
-		for (int i = 0; i < (MAX_CAR_SPACES + 1); i++) {
+	public void testParkVehicleBigCarNoSpaces() throws SimulationException, VehicleException {
+		
+		// Attempt to overfill the big car spaces
+		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL_CAR_SPACES + 1); i++) {
 			Car car = new Car("C" + i, ONE, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
@@ -673,8 +693,10 @@ public class CarParkTests {
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
 	@Test(expected=SimulationException.class)
-	public void testParkVehicleSmallCarNoSpaces() throws SimulationException, VehicleException {		
-		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + MAX_CAR_SPACES + 1); i++) {
+	public void testParkVehicleSmallCarNoSpaces() throws SimulationException, VehicleException {
+		
+		// Attempt to overfill the car spaces with small cars
+		for (int i = 0; i < (MAX_CAR_SPACES + 1); i++) {
 			Car car = new Car("C" + i, ONE, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
@@ -687,7 +709,9 @@ public class CarParkTests {
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
 	@Test(expected=SimulationException.class)
-	public void testParkVehicleMotorCycleNoSpaces() throws SimulationException, VehicleException {		
+	public void testParkVehicleMotorCycleNoSpaces() throws SimulationException, VehicleException {
+		
+		// Attempt to overfil the motorcycle and small car spaces with mtoorcycles
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES + 1); i++) {
 			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
@@ -793,11 +817,14 @@ public class CarParkTests {
 	 */
 	@Test(expected=SimulationException.class)
 	public void testProcessQueueBigCarNoSpaces() throws SimulationException, VehicleException {
-		for (int i = 0; i < (MAX_CAR_SPACES); i++) {
+		
+		// Fill all big car spaces with big cars
+		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL_CAR_SPACES); i++) {
 			Car car = new Car("C" + i, ONE, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
+		// Attempt to process the queue when the next car is a big car
 		Car car = new Car("C" + i, ONE, NOT_SMALL);
 		carpark.enterQueue(car);
 		carpark.processQueue(ARRIVAL_TIME, sim);
@@ -811,11 +838,14 @@ public class CarParkTests {
 	 */
 	@Test(expected=SimulationException.class)
 	public void testProcessQueueSmallCarNoSpaces() throws SimulationException, VehicleException {
-		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + MAX_CAR_SPACES); i++) {
+		
+		// Fill all car spaces with small cars
+		for (int i = 0; i < (MAX_CAR_SPACES); i++) {
 			Car car = new Car("C" + i, ONE, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
+		// Attempt to proess the queue when the next car is a small car
 		carpark.enterQueue(car);
 		carpark.processQueue(ARRIVAL_TIME, sim);
 	}
@@ -828,11 +858,14 @@ public class CarParkTests {
 	 */
 	@Test(expected=SimulationException.class)
 	public void testProcessQueueMotorCycleNoSpaces() throws SimulationException, VehicleException {	
+		
+		// Fill all motorcycle and small car spaces with motorcycles
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES); i++) {
 			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
+		// Attempt to process the queue when the next vehicle is a motorcycle
 		carpark.enterQueue(moto);
 		carpark.processQueue(ARRIVAL_TIME, sim);
 	}
@@ -931,6 +964,8 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testQueueFullTrue() throws VehicleException, SimulationException {
+		
+		// Fill the queue with small cars
 		for (int i = 0; i < MAX_QUEUE_SIZE; i++) {
 			Car car = new Car("C" + i, ONE, SMALL);
 			carpark.enterQueue(car);
@@ -974,10 +1009,14 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testSpacesAvailableFalseBigCar() throws VehicleException, SimulationException {
-		for (int i = 0; i < MAX_CAR_SPACES; i++) {
+		
+		// Fill the big car spaces with big cars
+		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL_CAR_SPACES); i++) {
 			Car car = new Car("C" + i, ONE, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
+		
+		Car car = new Car("C", ONE, NOT_SMALL);
 		assertFalse(carpark.spacesAvailable(car));
 	}
 	
@@ -1002,10 +1041,13 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testSpacesAvailableTrueSmallCar2() throws VehicleException, SimulationException {
+		
+		// Overfill the small car spaces
 		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + 3); i++) {
 			Car car = new Car("C" + i, ONE, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
+		
 		assertTrue(carpark.spacesAvailable(car));
 	}
 	
@@ -1018,10 +1060,13 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testSpacesAvailableFalseSmallCar() throws VehicleException, SimulationException {
-		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + MAX_CAR_SPACES); i++) {
+		
+		// Fill all car spaces with small cars
+		for (int i = 0; i < (MAX_CAR_SPACES); i++) {
 			Car car = new Car("C" + i, ONE, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
+		
 		assertFalse(carpark.spacesAvailable(car));
 	}
 	
@@ -1034,16 +1079,20 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testSpacesAvailableFalseSmallCar2() throws VehicleException, SimulationException {
+		
+		// Overfill the small car spaces
 		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + 2); i++) {
 			Car car = new Car("C" + i, ONE, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
+		// Fill the remaining car spaces with big cars
 		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL_CAR_SPACES - 2); i++) {
 			Car car = new Car("C" + i, ONE, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
+		// Assert that there are no spaces available for small cars
 		Car car = new Car("C" + i, ONE, SMALL);
 		assertFalse(carpark.spacesAvailable(car));
 	}
@@ -1069,10 +1118,13 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testSpacesAvailableTrueMotorcycle2() throws VehicleException, SimulationException {
+		
+		// Overfill the motorcycle spaces
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + 3); i++) {
 			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
+		
 		assertTrue(carpark.spacesAvailable(moto));
 	}
 	
@@ -1085,10 +1137,13 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testSpacesAvailableFalseMotorcycle() throws VehicleException, SimulationException {
+		
+		// Fill all motorcycle and small car spaces with motorcycles
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES); i++) {
 			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
+		
 		assertFalse(carpark.spacesAvailable(moto));
 	}
 	
@@ -1101,16 +1156,21 @@ public class CarParkTests {
 	 */
 	@Test
 	public void testSpacesAvailableFalseMotorcycle2() throws VehicleException, SimulationException {
+		
+		// Overfill the motorcycle spaces
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + 2); i++) {
 			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
+		// Fill the remaining small car spaces, and overflow into
+		// the big car spaces
 		for (int i = 0; i < (MAX_SMALL_CAR_SPACES); i++) {
 			Car car = new Car("C" + i, ONE, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
+		// Assert that there are no spaces available for motorcycles
 		assertFalse(carpark.spacesAvailable(moto));
 	}
 	
@@ -1126,10 +1186,13 @@ public class CarParkTests {
 	 */
 	@Test(expected=SimulationException.class)
 	public void testTryProcessNewVehiclesBigCar() throws SimulationException, VehicleException {	
-		for (int i = 0; i < MAX_CAR_SPACES; i++) {
+		
+		// Fill the big car spaces with big cars
+		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL_CAR_SPACES); i++) {
 			Car car = new Car("C" + i, ONE, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
+		
 		carpark.tryProcessNewVehicles(ARRIVAL_TIME, sim);
 	}
 	
@@ -1142,10 +1205,13 @@ public class CarParkTests {
 	 */
 	@Test(expected=SimulationException.class)
 	public void testTryProcessNewVehiclesSmallCar() throws SimulationException, VehicleException {
-		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + MAX_CAR_SPACES); i++) {
+		
+		// Fill all car spaces with small cars
+		for (int i = 0; i < (MAX_CAR_SPACES); i++) {
 			Car car = new Car("C" + i, ONE, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
+		
 		carpark.tryProcessNewVehicles(ARRIVAL_TIME, sim);
 	}
 	
@@ -1158,10 +1224,13 @@ public class CarParkTests {
 	 */
 	@Test(expected=SimulationException.class)
 	public void testTryProcessNewVehiclesMotorcycle() throws SimulationException, VehicleException {
+		
+		// Fill all motorcycle and small car spaces with motorcycles
 		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + MAX_SMALL_CAR_SPACES); i++) {
 			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
 		}
+		
 		carpark.tryProcessNewVehicles(ARRIVAL_TIME, sim);
 	}
 	
