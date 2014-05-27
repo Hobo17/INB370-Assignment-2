@@ -824,8 +824,12 @@ public class CarParkTests {
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
+<<<<<<< HEAD
 		// Attempt to process the queue when the next car is a big car
 		Car car = new Car("C" + i, ONE, NOT_SMALL);
+=======
+		Car car = new Car("C123", ONE, NOT_SMALL);
+>>>>>>> 1db94c36459009f29ae0b30470eddf8a91289321
 		carpark.enterQueue(car);
 		carpark.processQueue(ARRIVAL_TIME, sim);
 	}
@@ -871,6 +875,20 @@ public class CarParkTests {
 	}
 	
 	/**
+	 * Test method for 
+	 * @throws asgn2.Exceptions.SimulationException
+	 */
+	@Test(expected=SimulationException.class)
+	public void testProcessQueueMultipleVehicles() throws SimulationException {
+		// TODO:
+		// SET MAX SPACES TO SOMETHING MANAGEABLE
+		// ADD CARS, SMALL CARS AND MOTORCYCLES MANUALLY
+		// ENSURE SPACES FILL APPROPRIATELY
+		// AND THAT SIMULATION EXCEPTION THROWN CORRECTLY
+		//		
+	}
+	
+	/**
 	 * Test method for processQueue with a car in the correct state,
 	 * ie queued
 	 * @throws asgn2.Exceptions.VehicleException
@@ -879,7 +897,7 @@ public class CarParkTests {
 	@Test
 	public void testProcessQueueCorrectState() throws VehicleException, SimulationException {
 		carpark.enterQueue(car);
-		carpark.processQueue(ARRIVAL_TIME, sim);
+		carpark.processQueue(ARRIVAL_TIME + 1, sim);
 	}
 	
 	/**
@@ -890,7 +908,7 @@ public class CarParkTests {
 	@Test(expected=VehicleException.class)
 	public void testProcessQueueNewState() throws VehicleException, SimulationException {
 		this.car = new Car(VEH_ID, ONE, SMALL);
-		carpark.processQueue(ARRIVAL_TIME, sim);
+		carpark.processQueue(ARRIVAL_TIME + 1, sim);
 	}
 	
 	/**
@@ -901,7 +919,7 @@ public class CarParkTests {
 	@Test(expected=VehicleException.class)
 	public void testProcessQueueParkedState() throws VehicleException, SimulationException {
 		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
-		carpark.processQueue(ARRIVAL_TIME, sim);
+		carpark.processQueue(ARRIVAL_TIME + 1, sim);
 	}
 	
 	/**
@@ -1092,8 +1110,12 @@ public class CarParkTests {
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
+<<<<<<< HEAD
 		// Assert that there are no spaces available for small cars
 		Car car = new Car("C" + i, ONE, SMALL);
+=======
+		Car car = new Car("C123", ONE, SMALL);
+>>>>>>> 1db94c36459009f29ae0b30470eddf8a91289321
 		assertFalse(carpark.spacesAvailable(car));
 	}
 	

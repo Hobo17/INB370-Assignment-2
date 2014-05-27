@@ -49,11 +49,11 @@ public class CarPark {
 
 	private int numCars; // number of cars in the carpark, including big and
 							// small cars
-	private int numBigCars; // number of big cars in the carpark
 	private int numSmallCars; // number of small cars in the carpark
 	private int numMotorCycles; // number of motorcycles in the carpark
 	private int numVehicles; // number of vehicles in the carpark, including big
 								// cars, small cars, and motorcycles
+	private int numVehTotal; // Includes all vehicles including newly made vehicles
 	private int numDissatisfied; // number of dissatisfied customers
 
 	private ArrayList<Vehicle> currentVehicles; // holds vehicles currently in
@@ -100,11 +100,11 @@ public class CarPark {
 
 		// Set basic size parameters
 		this.numCars = 0;
-		this.numBigCars = (numCars - numSmallCars);
 		this.numSmallCars = 0;
 		this.numMotorCycles = 0;
-		this.numVehicles = (numCars + numMotorCycles);
+		this.numVehicles = 0;
 		this.numDissatisfied = 0;
+		this.numVehTotal = 0;
 		this.status = "";
 
 		// Initialise Arraylists
@@ -272,11 +272,6 @@ public class CarPark {
 			VehicleException {
 		if (!this.queuedVehicles.contains(v)) {
 			throw new SimulationException("This vehicle is not in the queue.");
-		} else if (!v.isQueued()) {
-			throw new VehicleException("This vehicle is in an incorrect state.");
-		} else if (exitTime > v.getArrivalTime()) {
-			throw new VehicleException(
-					"Timing constraints have been violated: The exit time must be later than the arrival time.");
 		} else {
 			this.queuedVehicles.remove(v);
 			v.exitQueuedState(exitTime);
@@ -449,13 +444,6 @@ public class CarPark {
 
 		while (vehiclesIter.hasNext()) {
 			Vehicle v = vehiclesIter.next();
-			if (!v.isQueued()) {
-				throw new VehicleException(
-						"One or more vehicles are not in the correct state.");
-			} else if (time > v.getArrivalTime()) {
-				throw new VehicleException(
-						"Timing constraints have been violated: The exit time must be later than the arrival time.");
-			}
 
 			if (this.spacesAvailable(v)) {
 				this.exitQueue(v, time);
@@ -535,12 +523,14 @@ public class CarPark {
 	 */
 	@Override
 	public String toString() {
-		return "CarPark [numVehicles: " + this.numVehicles + " numCars: "
-				+ this.numCars + " numBigCars: " + this.numBigCars
-				+ " numSmallCars: " + this.numSmallCars + " numMotorCycles: "
-				+ this.numMotorCycles + " queueSize: "
-				+ this.queuedVehicles.size() + " numDissatisfied: "
-				+ this.numDissatisfied + "]";
+		return "CarPark [count: " + numVehTotal 
+				+ " numCars: "	+ this.numCars 
+				+ " numBigCars: " + (this.numCars - this.numSmallCars)
+				+ " numSmallCars: " + this.numSmallCars 
+				+ " numMotorCycles: " + this.numMotorCycles 
+				+ " queue: " + this.queuedVehicles.size() 
+				+ " numDissatisfied: " + this.numDissatisfied 
+				+ " past: " + this.archivedVehicles.size() + "]";
 	}
 
 	/**
@@ -560,10 +550,9 @@ public class CarPark {
 		Vehicle newVehicle;
 		
 		if (sim.newCarTrial()) {
-			numCars++;
+			numVehTotal++;
 			
 			if (sim.smallCarTrial()) {
-				numSmallCars++;
 				newVehicle = new Car("C" + numSmallCars, time, true);
 				processNewVehicle(newVehicle, time, sim);
 			} else {
@@ -573,7 +562,7 @@ public class CarPark {
 		}
 		
 		if (sim.motorCycleTrial()) {
-			numMotorCycles++;
+			numVehTotal++;
 			newVehicle = new MotorCycle("M" + numMotorCycles, time);
 			processNewVehicle(newVehicle, time, sim);
 		}
