@@ -285,7 +285,7 @@ public abstract class Vehicle {
 						? "Exit from Queue: " + this.exitTime + 
 								"\nQueuing Time: " + String.valueOf(this.exitTime - this.arrivalTime)
 									+ ((this.exitTime - this.arrivalTime > Constants.MAXIMUM_QUEUE_TIME)
-										? "\nExceeded maximam acceptable queuing time by: " + (this.exitTime - this.arrivalTime)
+										? "\nExceeded maximum acceptable queuing time by: " + (this.exitTime - this.arrivalTime)
 										: "")
 						: "Vehicle was not queued");
 		

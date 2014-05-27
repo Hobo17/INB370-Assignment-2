@@ -218,7 +218,7 @@ public class CarPark {
 	 * 
 	 * @return true if car park full, false otherwise
 	 */
-	public boolean carParkFull() {
+	public boolean carParkFull() {;
 		return(this.numVehicles == this.maxCarParkSpaces);
 	}
 
@@ -278,7 +278,7 @@ public class CarPark {
 	 * @return String containing dump of final car park state
 	 */
 	public String finalState() {
-		String str = "Vehicles Processed: count:" + this.numVehicles
+		String str = "Vehicles Processed: count:" + this.numVehTotal
 				+ ", logged: " + this.archivedVehicles.size()
 				+ "\nVehicle Record: \n";
 		for (Vehicle v : this.archivedVehicles) {
@@ -332,7 +332,7 @@ public class CarPark {
 	 * @return String containing current state
 	 */
 	public String getStatus(int time) {
-		String str = time + "::" + this.numVehicles + "::" + "P:"
+		String str = time + "::" + this.numVehTotal + "::" + "P:"
 				+ this.currentVehicles.size() + "::" + "C:" + this.numCars
 				+ "::S:" + this.numSmallCars + "::M:" + this.numMotorCycles
 				+ "::D:" + this.numDissatisfied + "::A:"
@@ -405,6 +405,7 @@ public class CarPark {
 					"The vehicle is not in the correct state.");
 		}
 
+		numVehicles++;
 		this.currentVehicles.add(v);
 		v.enterParkedState(time, intendedDuration);
 
@@ -551,16 +552,16 @@ public class CarPark {
 		if (sim.newCarTrial()) {
 			
 			if (sim.smallCarTrial()) {
-				newVehicle = new Car("C" + (numVehicles + 1), time, true);
+				newVehicle = new Car("C" + (numVehTotal + 1), time, true);
 				processNewVehicle(newVehicle, time, sim);
 			} else {
-				newVehicle = new Car("C" + (numVehicles + 1), time, false);
+				newVehicle = new Car("C" + (numVehTotal + 1), time, false);
 				processNewVehicle(newVehicle, time, sim);
 			}
 		}
 		
 		if (sim.motorCycleTrial()) {
-			newVehicle = new MotorCycle("MC" + (numVehicles + 1), time);
+			newVehicle = new MotorCycle("MC" + (numVehTotal + 1), time);
 			processNewVehicle(newVehicle, time, sim);
 		}
 		
@@ -595,6 +596,7 @@ public class CarPark {
 		}
 
 		numVehicles++;
+		numVehTotal++;
 		
 	}
 
@@ -637,6 +639,7 @@ public class CarPark {
 		} else if(v instanceof MotorCycle) {
 			this.numMotorCycles--;
 		}
+		numVehicles--;
 		
 	}
 

@@ -74,7 +74,7 @@ public class CarParkTests {
 //////////////////////////////////////////////////////////////////////////
 	
 	//////////////////////////////////////////////////////////////////////////
-	// archiveDepartingVehicles tests
+	// archiveDepartingVehicle tests
 	//////////////////////////////////////////////////////////////////////////
 
 	/**
@@ -133,6 +133,20 @@ public class CarParkTests {
 		
 		carpark.archiveDepartingVehicles(DEPARTURE_TIME, false);
 	}
+	
+	/**
+	 * @throws VehicleException 
+	 * Test method for archiveDepartingVehicles for forcing exit
+	 * ie in the correct state
+	 * @throws asgn2.Exceptions.SimulationException
+	 */
+	@Test
+	public void testArchiveDepartingVehicles() throws SimulationException, VehicleException {
+		carpark.parkVehicle(car, this.EXIT_TIME, this.INTENDED_DURATION);
+		carpark.parkVehicle(moto, this.EXIT_TIME, this.INTENDED_DURATION);
+		carpark.archiveDepartingVehicles(Constants.CLOSING_TIME, true);
+		assertEquals(0, carpark.getNumCars() + carpark.getNumMotorCycles());
+	}
 
 	//////////////////////////////////////////////////////////////////////////
 	// archiveNewVehicle tests
@@ -179,7 +193,7 @@ public class CarParkTests {
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
-	@Test(expected=VehicleException.class)
+	@Test
 	public void testArchiveQueueFailuresParkedState() throws VehicleException, SimulationException {		
 		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		carpark.archiveQueueFailures(DEPARTURE_TIME + 1);
@@ -260,7 +274,7 @@ public class CarParkTests {
 		
 		// Fill all car spaces with small cars
 		for (int i = 0; i < MAX_CAR_SPACES; i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME + 1, SMALL);
+			Car car = new Car("C" + i, ARRIVAL_TIME, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME + 1, INTENDED_DURATION);
 		}
 		
@@ -269,7 +283,6 @@ public class CarParkTests {
 			MotorCycle moto = new MotorCycle(VEH_ID, ARRIVAL_TIME);
 			carpark.parkVehicle(moto, ARRIVAL_TIME + 1, INTENDED_DURATION);
 		}
-		
 		// Assert that the car park is full
 		assertTrue(carpark.carParkFull());
 	}

@@ -516,7 +516,7 @@ public class MotorCycleTests {
 	 */
 	@Test
 	public void testIsSatisfiedNotParked() throws VehicleException {
-		assertTrue(moto.isSatisfied());
+		assertFalse(moto.isSatisfied());
 	}
 	
 	/**
