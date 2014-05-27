@@ -130,7 +130,8 @@ public class CarPark {
 	 */
 	public void archiveDepartingVehicles(int time, boolean force)
 			throws VehicleException, SimulationException {
-		Iterator<Vehicle> vehiclesIter = currentVehicles.iterator();
+		ArrayList<Vehicle> tempCurVehicles = new ArrayList<Vehicle>(currentVehicles);
+		Iterator<Vehicle> vehiclesIter = tempCurVehicles.iterator();
 
 		while (vehiclesIter.hasNext()) {
 			Vehicle v = vehiclesIter.next();
@@ -181,7 +182,8 @@ public class CarPark {
 	 */
 	public void archiveQueueFailures(int time) throws VehicleException,
 			SimulationException {
-		Iterator<Vehicle> vehiclesIter = currentVehicles.iterator();
+		ArrayList<Vehicle> tempCurVehicles = new ArrayList<Vehicle>(currentVehicles);
+		Iterator<Vehicle> vehiclesIter = tempCurVehicles.iterator();
 
 		while (vehiclesIter.hasNext()) {
 			Vehicle v = vehiclesIter.next();
@@ -191,7 +193,7 @@ public class CarPark {
 						"This vehicle is not in the correct state.");
 			}
 
-			else if (time - v.getArrivalTime() > Constants.MAXIMUM_QUEUE_TIME) {
+			else if ((time - v.getArrivalTime()) > Constants.MAXIMUM_QUEUE_TIME) {
 				this.archivedVehicles.add(v);
 				this.exitQueue(v, time);
 				this.status += setVehicleMsg(v, "Q", "A");
@@ -209,11 +211,7 @@ public class CarPark {
 	 * @return true if car park empty, false otherwise
 	 */
 	public boolean carParkEmpty() {
-		if (this.numVehicles == 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return (this.numVehicles == 0);
 	}
 
 	/**
@@ -222,11 +220,7 @@ public class CarPark {
 	 * @return true if car park full, false otherwise
 	 */
 	public boolean carParkFull() {
-		if (this.numVehicles == this.maxCarParkSpaces) {
-			return true;
-		} else {
-			return false;
-		}
+		return(this.numVehicles == this.maxCarParkSpaces);
 	}
 
 	/**
@@ -414,6 +408,7 @@ public class CarPark {
 
 		this.currentVehicles.add(v);
 		v.enterParkedState(time, intendedDuration);
+		numVehicles++;
 
 		if (v instanceof Car) {
 			numCars++;
@@ -440,7 +435,8 @@ public class CarPark {
 	 */
 	public void processQueue(int time, Simulator sim) throws VehicleException,
 			SimulationException {
-		Iterator<Vehicle> vehiclesIter = queuedVehicles.iterator();
+		ArrayList<Vehicle> tempQuedVehicles = new ArrayList<Vehicle>(queuedVehicles);
+		Iterator<Vehicle> vehiclesIter = tempQuedVehicles.iterator();
 
 		while (vehiclesIter.hasNext()) {
 			Vehicle v = vehiclesIter.next();
@@ -501,12 +497,12 @@ public class CarPark {
 	public boolean spacesAvailable(Vehicle v) {
 		int exMC = Math.max(0, getNumMotorCycles() - maxMotorCycleSpaces);
 		
-		int availMC = Math.min(0, maxMotorCycleSpaces - getNumMotorCycles());
-		int availSC = Math.min(0, maxSmallCarSpaces - getNumSmallCars() - exMC);
+		int availMC = Math.max(0, maxMotorCycleSpaces - getNumMotorCycles());
+		int availSC = Math.max(0, maxSmallCarSpaces - getNumSmallCars() - exMC);
 				
 		if(v instanceof Car){
 			if(((Car) v).isSmall()){
-				if(availSC > 0)
+				if(availSC > 0 || getNumCars() < this.maxCarSpaces)
 					return true;
 			}
 			
