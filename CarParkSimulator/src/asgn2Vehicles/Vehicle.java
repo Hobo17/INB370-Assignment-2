@@ -193,7 +193,7 @@ public abstract class Vehicle {
 		}
 		
 		this.exitTime = exitTime;
-		this.state = State.N;
+		this.state = State.A;
 	}
 	
 	/**
@@ -296,7 +296,7 @@ public abstract class Vehicle {
 		
 		// Check to see if it is a car, if so check if it is small or not.
 		output += (this instanceof Car) 
-				? "\nCar can" + (((Car)this).isSmall() ? "" : "not") + " use small parking space"
+				? "\nCar can" + (((Car)this).isSmall() ? "" : "not") + " use small " + (((Car)this).isSmall() ? "" : "car ") + "parking space"
 				: "";
 		
 		return output;

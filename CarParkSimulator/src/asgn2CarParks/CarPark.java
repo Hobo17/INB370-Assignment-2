@@ -184,7 +184,7 @@ public class CarPark {
 	public void archiveQueueFailures(int time) throws VehicleException,
 			SimulationException {
 		
-		ArrayList<Vehicle> tempCurVehicles = new ArrayList<Vehicle>(currentVehicles);
+		ArrayList<Vehicle> tempCurVehicles = new ArrayList<Vehicle>(queuedVehicles);
 		Iterator<Vehicle> vehiclesIter = tempCurVehicles.iterator();
 
 		while (vehiclesIter.hasNext()) {
@@ -407,7 +407,6 @@ public class CarPark {
 
 		this.currentVehicles.add(v);
 		v.enterParkedState(time, intendedDuration);
-		numVehicles++;
 
 		if (v instanceof Car) {
 			numCars++;
@@ -550,20 +549,18 @@ public class CarPark {
 		Vehicle newVehicle;
 		
 		if (sim.newCarTrial()) {
-			numVehTotal++;
 			
 			if (sim.smallCarTrial()) {
-				newVehicle = new Car("C" + numSmallCars, time, true);
+				newVehicle = new Car("C" + numVehicles + 1, time, true);
 				processNewVehicle(newVehicle, time, sim);
 			} else {
-				newVehicle = new Car("C" + numCars, time, false);
+				newVehicle = new Car("C" + numVehicles + 1, time, false);
 				processNewVehicle(newVehicle, time, sim);
 			}
 		}
 		
 		if (sim.motorCycleTrial()) {
-			numVehTotal++;
-			newVehicle = new MotorCycle("M" + numMotorCycles, time);
+			newVehicle = new MotorCycle("M" + numVehicles + 1, time);
 			processNewVehicle(newVehicle, time, sim);
 		}
 		
@@ -586,11 +583,6 @@ public class CarPark {
 	private void processNewVehicle(Vehicle v, int time, Simulator sim)
 			throws VehicleException, SimulationException {
 		
-		if (!this.spacesAvailable(v)) {
-			throw new SimulationException("There are no spaces available "
-					+ "for this type of vehicle.");
-		} 
-		
 		if (this.spacesAvailable(v)) {
 			this.parkVehicle(v,  time,  sim.setDuration());
 			this.status += setVehicleMsg(v, "N", "P");
@@ -601,6 +593,8 @@ public class CarPark {
 			this.archiveNewVehicle(v);
 			this.status += setVehicleMsg(v, "N", "A");
 		}
+
+		numVehicles++;
 		
 	}
 
@@ -632,7 +626,6 @@ public class CarPark {
 		}
 		
 		this.currentVehicles.remove(v);
-		this.archivedVehicles.add(v);
 		v.exitParkedState(departureTime);
 		this.status += setVehicleMsg(v, "P", "A");
 		
