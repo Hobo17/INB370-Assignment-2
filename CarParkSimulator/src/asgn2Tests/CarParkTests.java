@@ -634,7 +634,7 @@ public class CarParkTests {
 	public void testParkVehicleBigCar() throws VehicleException, SimulationException {
 		
 		// Fill all big car spaces with big cars
-		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL-CAR-SPACES); i++) {
+		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL_CAR_SPACES); i++) {
 			Car car = new Car("C" + i, ONE, NOT_SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
@@ -824,12 +824,8 @@ public class CarParkTests {
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
-<<<<<<< HEAD
 		// Attempt to process the queue when the next car is a big car
-		Car car = new Car("C" + i, ONE, NOT_SMALL);
-=======
 		Car car = new Car("C123", ONE, NOT_SMALL);
->>>>>>> 1db94c36459009f29ae0b30470eddf8a91289321
 		carpark.enterQueue(car);
 		carpark.processQueue(ARRIVAL_TIME, sim);
 	}
@@ -1110,12 +1106,8 @@ public class CarParkTests {
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
-<<<<<<< HEAD
 		// Assert that there are no spaces available for small cars
-		Car car = new Car("C" + i, ONE, SMALL);
-=======
 		Car car = new Car("C123", ONE, SMALL);
->>>>>>> 1db94c36459009f29ae0b30470eddf8a91289321
 		assertFalse(carpark.spacesAvailable(car));
 	}
 	
