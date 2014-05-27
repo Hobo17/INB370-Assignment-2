@@ -10,33 +10,33 @@
  */
 package asgn2Simulators;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.TextArea;
+
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.JLayeredPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
-import javax.swing.JSpinner;
-import javax.swing.JScrollBar;
 import javax.swing.JMenuBar;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JTextArea;
 
 /**
  * @authors Rebecca Zanchetta (n8300941) &
  * 			Brad Vose (n8280282)
  *
  */
-public class GUISimulator extends JFrame {
+public class GUISimulator extends javax.swing.JFrame {
 
 	private JPanel contentPane;
 	private JTextField DEFAULT_MAX_CAR_SPACES;
@@ -59,6 +59,9 @@ public class GUISimulator extends JFrame {
 	private JTextField DEFAULT_INTENDED_STAY_SD;
 	private JSeparator separator_1;
 	private JMenuBar menuBar_2;
+	
+	private TextArea simulationResultsTextArea = new TextArea();
+	private ChartPanel simulationGraph;
 
 	/**
 	 * Launch the application.
@@ -80,6 +83,10 @@ public class GUISimulator extends JFrame {
 	 * Create the frame.
 	 */
 	public GUISimulator() {
+		
+		simulationGraph = new ChartPanel();
+		
+		
 		setTitle("Car Park Simulation");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 561, 633);
@@ -211,7 +218,9 @@ public class GUISimulator extends JFrame {
 		DEFAULT_INTENDED_STAY_SD.setBounds(267, 345, 86, 20);
 		contentPane.add(DEFAULT_INTENDED_STAY_SD);
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		
+		
+		JTabbedPane tabbedPane = new javax.swing.JTabbedPane();
 		tabbedPane.setBackground(Color.WHITE);
 		tabbedPane.setBounds(10, 380, 525, 163);
 		contentPane.add(tabbedPane);
@@ -219,17 +228,19 @@ public class GUISimulator extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		menuBar.setForeground(new Color(0, 0, 0));
-		tabbedPane.addTab("  Log  ", null, menuBar, null);
+		tabbedPane.addTab("  Log  ", simulationResultsTextArea);
 		
 		JMenuBar menuBar_1 = new JMenuBar();
 		menuBar_1.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		menuBar_1.setForeground(new Color(0, 0, 0));
-		tabbedPane.addTab("  Simulation Graph  ", null, menuBar_1, null);
+		tabbedPane.addTab("  Simulation Graph  ", simulationGraph);
 		
 		menuBar_2 = new JMenuBar();
 		menuBar_2.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		menuBar_2.setForeground(new Color(0, 0, 0));
 		tabbedPane.addTab("  Summary Report  ", null, menuBar_2, null);
+		
+		
 		
 		JButton btnRunSimulation = new JButton("Run Simulation");
 		btnRunSimulation.setBackground(Color.WHITE);
@@ -244,5 +255,6 @@ public class GUISimulator extends JFrame {
 		separator_1 = new JSeparator();
 		separator_1.setBounds(20, 373, 505, 2);
 		contentPane.add(separator_1);
+
 	}
 }
