@@ -26,11 +26,18 @@ import javax.swing.JTabbedPane;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 import javax.swing.JMenuBar;
+
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+
 import javax.swing.JTextArea;
+
+import asgn2CarParks.CarPark;
+import asgn2Exceptions.SimulationException;
+import asgn2Exceptions.VehicleException;
 
 /**
  * @authors Rebecca Zanchetta (n8300941) &
@@ -60,15 +67,22 @@ public class GUISimulator extends javax.swing.JFrame {
 	private JTextField intendedStaySDField;
 	private JSeparator separator_1;
 	private JMenuBar menuBar_2;
-	private JTextArea textArea;
 	
-	private TextArea simulationResultsTextArea = new TextArea();
+	private TextArea textArea = new TextArea();
 	private ChartPanel simulationGraph;
+	
+	private CarPark carPark;
+	private Simulator sim;
+	private Log log;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(final String[] args) {
+		CarPark cp = new CarPark();
+		Simulator s = null;
+		Log l = null; 
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				if(args.length == 9){
@@ -165,7 +179,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if(Integer.parseInt(maxCarSpacesField.getText()) < 0){
-					textArea.setText("Max Car Spaces cannot be below 0");
+					textArea.appendText("\nMax Car Spaces cannot be below 0");
 					maxCarSpacesField.setText("0");
 				}
 			}
@@ -185,7 +199,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			public void focusLost(FocusEvent e) {
 				if(Integer.parseInt(maxSmallCarSpacesField.getText()) < 0 || 
 						Integer.parseInt(maxSmallCarSpacesField.getText())  > Integer.parseInt(maxCarSpacesField.getText())){
-					textArea.setText("Max Small Car Spaces cannot be below 0 or more than total car spaces");
+					textArea.appendText("\nMax Small Car Spaces cannot be below 0 or more than total car spaces");
 					maxSmallCarSpacesField.setText("0");
 				}
 			}
@@ -200,7 +214,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if(Integer.parseInt(maxMotoSpacesField.getText()) < 0){
-					textArea.setText("Max MotorCycle Spaces cannot be below 0");
+					textArea.appendText("\nMax MotorCycle Spaces cannot be below 0");
 					maxMotoSpacesField.setText("0");
 				}
 			}
@@ -215,7 +229,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if(Integer.parseInt(maxQueueSizeField.getText()) < 0){
-					textArea.setText("Max Queue length cannot be below 0");
+					textArea.appendText("\nMax Queue length cannot be below 0");
 					maxQueueSizeField.setText("0");
 				}
 			}
@@ -271,7 +285,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			public void focusLost(FocusEvent e) {
 				if(Double.parseDouble(carProbField.getText()) < 0 ||
 						Double.parseDouble(carProbField.getText()) > 1){
-					textArea.setText("Probability must be between 0 and 1");
+					textArea.appendText("\nProbability must be between 0 and 1");
 					carProbField.setText("0");
 				}
 			}
@@ -287,7 +301,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			public void focusLost(FocusEvent e) {
 				if(Double.parseDouble(smallCarProbField.getText()) < 0 ||
 						Double.parseDouble(smallCarProbField.getText()) > 1){
-					textArea.setText("Probability must be between 0 and 1");
+					textArea.appendText("\nProbability must be between 0 and 1");
 					smallCarProbField.setText("0");
 				}
 			}
@@ -303,7 +317,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			public void focusLost(FocusEvent e) {
 				if(Double.parseDouble(motoProbField.getText()) < 0 ||
 						Double.parseDouble(motoProbField.getText()) > 1){
-					textArea.setText("Probability must be between 0 and 1");
+					textArea.appendText("\nProbability must be between 0 and 1");
 					motoProbField.setText("0");
 				}
 			}
@@ -338,11 +352,8 @@ public class GUISimulator extends javax.swing.JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		menuBar.setForeground(new Color(0, 0, 0));
-		tabbedPane.addTab("  Log  ", simulationResultsTextArea);
-		
-		textArea = new JTextArea();
 		textArea.setEditable(false);
-		menuBar.add(textArea);
+		tabbedPane.addTab("  Log  ", textArea);
 		
 		JMenuBar menuBar_1 = new JMenuBar();
 		menuBar_1.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -360,7 +371,20 @@ public class GUISimulator extends javax.swing.JFrame {
 		btnRunSimulation.setBackground(Color.WHITE);
 		btnRunSimulation.setFont(new Font("Tahoma", Font.ITALIC, 20));
 		btnRunSimulation.setBounds(150, 548, 240, 34);
-		contentPane.add(btnRunSimulation);
+		contentPane.add(btnRunSimulation);		btnRunSimulation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				launchSimulation(
+					Integer.parseInt(maxCarSpacesField.getText()), 
+					Integer.parseInt(maxSmallCarSpacesField.getText()), 
+					Integer.parseInt(maxMotoSpacesField.getText()), 
+					Integer.parseInt(maxQueueSizeField.getText()), 
+					Integer.parseInt(seedField.getText()), 
+					Double.parseDouble(carProbField.getText()), 
+					Double.parseDouble(smallCarProbField.getText()), 
+					Double.parseDouble(motoProbField.getText()), 
+					Double.parseDouble(intendedStayMeanField.getText()));
+			}
+		});
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(20, 180, 505, 2);
@@ -369,5 +393,78 @@ public class GUISimulator extends javax.swing.JFrame {
 		separator_1 = new JSeparator();
 		separator_1.setBounds(20, 373, 505, 2);
 		contentPane.add(separator_1);
+	}
+	
+	/**
+	 * Method to run the simulation from start to finish. Exceptions are propagated upwards from Vehicle,
+	 * Simulation and Log objects as necessary 
+	 * @throws VehicleException if Vehicle creation or operation constraints violated 
+	 * @throws SimulationException if Simulation constraints are violated 
+	 * @throws IOException on logging failures
+	 */
+	public void runSimulation() throws VehicleException, SimulationException, IOException {
+		this.log.initialEntry(this.carPark,this.sim);
+		for (int time=0; time<=Constants.CLOSING_TIME; time++) {
+			//queue elements exceed max waiting time
+			if (!this.carPark.queueEmpty()) {
+				this.carPark.archiveQueueFailures(time);
+			}
+			//vehicles whose time has expired
+			if (!this.carPark.carParkEmpty()) {
+				//force exit at closing time, otherwise normal
+				boolean force = (time == Constants.CLOSING_TIME);
+				this.carPark.archiveDepartingVehicles(time, force);
+			}
+			//attempt to clear the queue 
+			if (!this.carPark.carParkFull()) {
+				this.carPark.processQueue(time,this.sim);
+			}
+			// new vehicles from minute 1 until the last hour
+			if (newVehiclesAllowed(time)) { 
+				this.carPark.tryProcessNewVehicles(time,this.sim);
+			}
+			//Log progress 
+			this.log.logEntry(time,this.carPark);
+		}
+		this.log.finalise(this.carPark);
+	}
+
+	/**
+	 * Helper method to determine if new vehicles are permitted
+	 * @param time int holding current simulation time
+	 * @return true if new vehicles permitted, false if not allowed due to simulation constraints. 
+	 */
+	private boolean newVehiclesAllowed(int time) {
+		boolean allowed = (time >=1);
+		return allowed && (time <= (Constants.CLOSING_TIME - 60));
+	}
+	
+	private void launchSimulation(	int maxCarSpaces,
+									int maxSmallCarSpaces,
+									int maxMotoSpaces,
+									int maxQueueSize,
+									int seed,
+									double carProb,
+									double smallCarProb,
+									double motoProb,
+									double intendedStayMean){
+		carPark = new CarPark(maxCarSpaces, maxSmallCarSpaces,
+				maxMotoSpaces, maxQueueSize);
+
+		try{
+			sim = new Simulator(seed, intendedStayMean, intendedStayMean/3, carProb, smallCarProb, motoProb);
+			log = new Log();
+		} catch (IOException | SimulationException e1) {
+			e1.printStackTrace();
+			System.exit(-1);
+		}
+		
+	    try {
+	        runSimulation();
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	        textArea.appendText(e.getMessage());
+	    }
+	
 	}
 }
