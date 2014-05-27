@@ -179,7 +179,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if(Integer.parseInt(maxCarSpacesField.getText()) < 0){
-					textArea.appendText("\nMax Car Spaces cannot be below 0");
+					textArea.append("\nMax Car Spaces cannot be below 0");
 					maxCarSpacesField.setText("0");
 				}
 			}
@@ -199,7 +199,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			public void focusLost(FocusEvent e) {
 				if(Integer.parseInt(maxSmallCarSpacesField.getText()) < 0 || 
 						Integer.parseInt(maxSmallCarSpacesField.getText())  > Integer.parseInt(maxCarSpacesField.getText())){
-					textArea.appendText("\nMax Small Car Spaces cannot be below 0 or more than total car spaces");
+					textArea.append("\nMax Small Car Spaces cannot be below 0 or more than total car spaces");
 					maxSmallCarSpacesField.setText("0");
 				}
 			}
@@ -214,7 +214,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if(Integer.parseInt(maxMotoSpacesField.getText()) < 0){
-					textArea.appendText("\nMax MotorCycle Spaces cannot be below 0");
+					textArea.append("\nMax MotorCycle Spaces cannot be below 0");
 					maxMotoSpacesField.setText("0");
 				}
 			}
@@ -229,7 +229,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if(Integer.parseInt(maxQueueSizeField.getText()) < 0){
-					textArea.appendText("\nMax Queue length cannot be below 0");
+					textArea.append("\nMax Queue length cannot be below 0");
 					maxQueueSizeField.setText("0");
 				}
 			}
@@ -285,7 +285,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			public void focusLost(FocusEvent e) {
 				if(Double.parseDouble(carProbField.getText()) < 0 ||
 						Double.parseDouble(carProbField.getText()) > 1){
-					textArea.appendText("\nProbability must be between 0 and 1");
+					textArea.append("\nProbability must be between 0 and 1");
 					carProbField.setText("0");
 				}
 			}
@@ -301,7 +301,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			public void focusLost(FocusEvent e) {
 				if(Double.parseDouble(smallCarProbField.getText()) < 0 ||
 						Double.parseDouble(smallCarProbField.getText()) > 1){
-					textArea.appendText("\nProbability must be between 0 and 1");
+					textArea.append("\nProbability must be between 0 and 1");
 					smallCarProbField.setText("0");
 				}
 			}
@@ -317,7 +317,7 @@ public class GUISimulator extends javax.swing.JFrame {
 			public void focusLost(FocusEvent e) {
 				if(Double.parseDouble(motoProbField.getText()) < 0 ||
 						Double.parseDouble(motoProbField.getText()) > 1){
-					textArea.appendText("\nProbability must be between 0 and 1");
+					textArea.append("\nProbability must be between 0 and 1");
 					motoProbField.setText("0");
 				}
 			}
@@ -425,8 +425,13 @@ public class GUISimulator extends javax.swing.JFrame {
 			}
 			//Log progress 
 			this.log.logEntry(time,this.carPark);
+			this.textArea.append(this.carPark.getStatus(time));
+			
+			this.simulationGraph.addDataForGivenTimePoint(time, this.carPark.getNumCars(), 
+					this.carPark.getNumSmallCars(), this.carPark.getNumMotorCycles());
 		}
 		this.log.finalise(this.carPark);
+		this.simulationGraph.generateFinalChartFromData();
 	}
 
 	/**
@@ -463,7 +468,7 @@ public class GUISimulator extends javax.swing.JFrame {
 	        runSimulation();
 	    } catch (Exception e) {
 	    	e.printStackTrace();
-	        textArea.appendText(e.getMessage());
+	        textArea.append(e.getMessage());
 	    }
 	
 	}

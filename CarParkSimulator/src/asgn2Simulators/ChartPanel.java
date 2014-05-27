@@ -61,19 +61,14 @@ public class ChartPanel extends org.jfree.chart.ChartPanel {
     }
     
     // Adds datapoints for a particular moment intime to the graph
-    public void addDataForGivenTimePoint( int time, int dissatisfied, int archived, int queue, int nbCars, int nbSmallCars, int nbMotorCycles, int current, int total)
+    public void addDataForGivenTimePoint( int time, int nbCars, int nbSmallCars, int nbMotorCycles)
     {
         cal.set(2014,0,1,6, time);
         Date timePoint = cal.getTime();
         
-        dissTotal.add(new Minute(timePoint), dissatisfied);
-        archTotal.add(new Minute(timePoint), archived);
-        queueTotal.add(new Minute(timePoint), queue);
         mcTotal.add(new Minute(timePoint), nbMotorCycles);
         scarTotal.add(new Minute(timePoint), nbSmallCars);
-        carTotal.add(new Minute(timePoint),nbCars);
-        curTotal.add(new Minute(timePoint), current);
-        vehTotal.add(new Minute(timePoint), total);
+        carTotal.add(new Minute(timePoint), nbCars);
     }
     
     // Generate the chart once the car park simulation is completed
