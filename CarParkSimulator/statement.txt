@@ -1,0 +1,34 @@
+Partners:
+	- Bradley Vose (n8280282)
+	- Rebecca Zanchetta (n8300941)
+
+Statement of Contribution:
+	Bradley Vose:
+		- CarTests.java
+		- MotorCycleTests.java
+		- Vehicle.java
+		- Car.java
+		- MotorCycle.java
+		- Provided assistance with CarPark and CarParkTests
+		- Tested the console program to ensure it ran correctly
+		- Fixed errors here it did not run correctly
+		- Provided assisance with the simulation graph
+		- Fixed numerous bugs
+	Rebecca Zanchetta:
+		- CarParkTests.java
+		- CarPark.java
+		- GUI development using Window Builder
+		- Attempted to create simulation graph and show in the GUI
+
+	Both team members agree to this statement of contribution.
+
+Known Bugs / Incomplete Features:
+	- Unable to get simulation graph to work in GUI
+
+Running instructions:
+	- run.bat method is contained in the root directory of the .zip file
+	- Libraries used:
+		- JUnit
+		- Hamcrest
+		- JCommon
+		- JFreeChart
