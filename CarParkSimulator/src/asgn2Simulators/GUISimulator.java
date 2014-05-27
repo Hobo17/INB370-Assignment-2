@@ -427,11 +427,11 @@ public class GUISimulator extends javax.swing.JFrame {
 			this.log.logEntry(time,this.carPark);
 			this.textArea.append(this.carPark.getStatus(time));
 			
-			this.simulationGraph.addDataForGivenTimePoint(time, this.carPark.getNumCars(), 
-					this.carPark.getNumSmallCars(), this.carPark.getNumMotorCycles());
+			//this.simulationGraph.addDataForGivenTimePoint(time, this.carPark.getNumCars(), 
+			//		this.carPark.getNumSmallCars(), this.carPark.getNumMotorCycles());
 		}
 		this.log.finalise(this.carPark);
-		this.simulationGraph.generateFinalChartFromData();
+		//this.simulationGraph.generateFinalChartFromData();
 	}
 
 	/**
