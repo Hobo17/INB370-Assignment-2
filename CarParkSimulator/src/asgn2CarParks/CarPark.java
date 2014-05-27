@@ -444,12 +444,17 @@ public class CarPark {
 
 		while (vehiclesIter.hasNext()) {
 			Vehicle v = vehiclesIter.next();
+			
+			if(!v.isQueued()){
+				throw new SimulationException("This vehicle is not in the queue.");
+			}
 
 			if (this.spacesAvailable(v)) {
 				this.exitQueue(v, time);
 				this.parkVehicle(v, time, sim.setDuration());
 				this.status += setVehicleMsg(v, "Q", "P");
 			} else {
+				// Break loop as there are no spaces, causes 'block' in queue
 				break;
 			}
 		}

@@ -185,7 +185,7 @@ public class CarParkTests {
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
-	@Test(expected=VehicleException.class)
+	@Test
 	public void testArchiveQueueFailuresUnparkedState() throws VehicleException, SimulationException {		
 		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		carpark.unparkVehicle(car, ARRIVAL_TIME + 10);
