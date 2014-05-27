@@ -93,15 +93,14 @@ public class SimulationRunner {
 			cp = new CarPark(maxCarSpaces, maxSmallCarSpaces, 
 					maxMotorCycleSpaces, maxQueueSize);
 			
-			int seed = Integer.parseInt(args[4]);
+			int seed = Integer.parseInt(args[5]);
 			double	meanStay = Double.parseDouble(args[8]),
-					sdStay = Double.parseDouble(args[9]),
 					carProb = Double.parseDouble(args[5]),
 					smallCarProb = Double.parseDouble(args[6]),
 					mcProb = Double.parseDouble(args[7]);
 			
 			try{
-				s = new Simulator(seed, meanStay, sdStay, carProb, smallCarProb, mcProb);
+				s = new Simulator(seed, meanStay, meanStay/3, carProb, smallCarProb, mcProb);
 				l = new Log();
 			} catch (IOException | SimulationException e1) {
 				e1.printStackTrace();

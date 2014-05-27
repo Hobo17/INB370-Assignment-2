@@ -10,7 +10,6 @@
  */
 package asgn2Simulators;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -20,16 +19,15 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.JLayeredPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
-import javax.swing.JSpinner;
-import javax.swing.JScrollBar;
 import javax.swing.JMenuBar;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextArea;
 
 /**
  * @authors Rebecca Zanchetta (n8300941) &
@@ -39,10 +37,10 @@ import java.awt.event.KeyEvent;
 public class GUISimulator extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField DEFAULT_MAX_CAR_SPACES;
-	private JTextField DEFAULT_MAX_SMALL_CAR_SPACES;
-	private JTextField DEFAULT_MAX_MOTORCYCLE_SPACES;
-	private JTextField DEFAULT_MAX_QUEUE_SIZE;
+	private JTextField maxCarSpacesField;
+	private JTextField maxSmallCarSpacesField;
+	private JTextField maxMotoSpacesField;
+	private JTextField maxQueueSizeField;
 	private JLabel lblSizeParametres;
 	private JLabel lblRngProbabilities;
 	private JLabel lblSimulationSeed;
@@ -51,35 +49,77 @@ public class GUISimulator extends JFrame {
 	private JLabel lblMotorcycleProbability;
 	private JLabel lblSdIntendedStay;
 	private JLabel lblMeanIntendedStay;
-	private JTextField DEFAULT_SEED;
-	private JTextField DEFAULT_CAR_PROB;
-	private JTextField DEFAULT_SMALL_CAR_PROB;
-	private JTextField DEFAULT_MOTORCYCLE_PROB;
-	private JTextField DEFAULT_INTENDED_STAY_MEAN;
-	private JTextField DEFAULT_INTENDED_STAY_SD;
+	private JTextField seedField;
+	private JTextField carProbField;
+	private JTextField smallCarProbField;
+	private JTextField motoProbField;
+	private JTextField intendedStayMeanField;
+	private JTextField intendedStaySDField;
 	private JSeparator separator_1;
 	private JMenuBar menuBar_2;
+	private JTextArea textArea;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					GUISimulator frame = new GUISimulator();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+				if(args.length == 9){
+					try {
+						GUISimulator frame = new GUISimulator(
+								Integer.parseInt(args[0]), 
+								Integer.parseInt(args[1]), 
+								Integer.parseInt(args[2]), 
+								Integer.parseInt(args[3]), 
+								Integer.parseInt(args[4]), 
+								Double.parseDouble(args[5]), 
+								Double.parseDouble(args[6]), 
+								Double.parseDouble(args[7]), 
+								Double.parseDouble(args[8])
+							);
+						frame.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+				else{
+					try {
+						GUISimulator frame = new GUISimulator();
+						frame.setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		});
+	}
+	
+	public GUISimulator() {
+		this(Constants.DEFAULT_MAX_CAR_SPACES,
+				Constants.DEFAULT_MAX_SMALL_CAR_SPACES,
+				Constants.DEFAULT_MAX_MOTORCYCLE_SPACES,
+				Constants.DEFAULT_MAX_QUEUE_SIZE,
+				Constants.DEFAULT_SEED,
+				Constants.DEFAULT_CAR_PROB,
+				Constants.DEFAULT_SMALL_CAR_PROB,
+				Constants.DEFAULT_MOTORCYCLE_PROB,
+				Constants.DEFAULT_INTENDED_STAY_MEAN);
 	}
 
 	/**
 	 * Create the frame.
 	 */
-	public GUISimulator() {
+	public GUISimulator(int maxCarSpaces,
+						int maxSmallCarSpaces,
+						int maxMotoSpaces,
+						int maxQueueLength,
+						int seed,
+						double carProb,
+						double smallCarProb,
+						double motoProb,
+						double intendedStayMean) {
+	
 		setTitle("Car Park Simulation");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 561, 633);
@@ -111,29 +151,66 @@ public class GUISimulator extends JFrame {
 		lblCarParkSimulation.setBounds(30, 16, 206, 26);
 		contentPane.add(lblCarParkSimulation);
 		
-		DEFAULT_MAX_CAR_SPACES = new JTextField();
-		DEFAULT_MAX_CAR_SPACES.setText("100");
-		DEFAULT_MAX_CAR_SPACES.setBounds(267, 78, 86, 20);
-		contentPane.add(DEFAULT_MAX_CAR_SPACES);
-		DEFAULT_MAX_CAR_SPACES.setColumns(10);
+		maxCarSpacesField = new JTextField();
+		maxCarSpacesField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(Integer.parseInt(maxCarSpacesField.getText()) < 0){
+					textArea.setText("Max Car Spaces cannot be below 0");
+					maxCarSpacesField.setText("0");
+				}
+			}
+		});
+		maxCarSpacesField.setText(String.valueOf(maxCarSpaces));
+		maxCarSpacesField.setBounds(267, 78, 86, 20);
+		contentPane.add(maxCarSpacesField);
+		maxCarSpacesField.setColumns(10);
 		
-		DEFAULT_MAX_SMALL_CAR_SPACES = new JTextField();
-		DEFAULT_MAX_SMALL_CAR_SPACES.setText("30");
-		DEFAULT_MAX_SMALL_CAR_SPACES.setBounds(267, 104, 86, 20);
-		contentPane.add(DEFAULT_MAX_SMALL_CAR_SPACES);
-		DEFAULT_MAX_SMALL_CAR_SPACES.setColumns(10);
+		maxSmallCarSpacesField = new JTextField();
+		maxSmallCarSpacesField.setText(String.valueOf(maxSmallCarSpaces));
+		maxSmallCarSpacesField.setBounds(267, 104, 86, 20);
+		contentPane.add(maxSmallCarSpacesField);
+		maxSmallCarSpacesField.setColumns(10);
+		maxSmallCarSpacesField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(Integer.parseInt(maxSmallCarSpacesField.getText()) < 0 || 
+						Integer.parseInt(maxSmallCarSpacesField.getText())  > Integer.parseInt(maxCarSpacesField.getText())){
+					textArea.setText("Max Small Car Spaces cannot be below 0 or more than total car spaces");
+					maxSmallCarSpacesField.setText("0");
+				}
+			}
+		});
 		
-		DEFAULT_MAX_MOTORCYCLE_SPACES = new JTextField();
-		DEFAULT_MAX_MOTORCYCLE_SPACES.setText("20");
-		DEFAULT_MAX_MOTORCYCLE_SPACES.setBounds(267, 130, 86, 20);
-		contentPane.add(DEFAULT_MAX_MOTORCYCLE_SPACES);
-		DEFAULT_MAX_MOTORCYCLE_SPACES.setColumns(10);
+		maxMotoSpacesField = new JTextField();
+		maxMotoSpacesField.setText(String.valueOf(maxMotoSpaces));
+		maxMotoSpacesField.setBounds(267, 130, 86, 20);
+		contentPane.add(maxMotoSpacesField);
+		maxMotoSpacesField.setColumns(10);
+		maxMotoSpacesField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(Integer.parseInt(maxMotoSpacesField.getText()) < 0){
+					textArea.setText("Max MotorCycle Spaces cannot be below 0");
+					maxMotoSpacesField.setText("0");
+				}
+			}
+		});
 		
-		DEFAULT_MAX_QUEUE_SIZE = new JTextField();
-		DEFAULT_MAX_QUEUE_SIZE.setText("10");
-		DEFAULT_MAX_QUEUE_SIZE.setBounds(267, 156, 86, 20);
-		contentPane.add(DEFAULT_MAX_QUEUE_SIZE);
-		DEFAULT_MAX_QUEUE_SIZE.setColumns(10);
+		maxQueueSizeField = new JTextField();
+		maxQueueSizeField.setText(String.valueOf(maxQueueLength));
+		maxQueueSizeField.setBounds(267, 156, 86, 20);
+		contentPane.add(maxQueueSizeField);
+		maxQueueSizeField.setColumns(10);
+		maxQueueSizeField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(Integer.parseInt(maxQueueSizeField.getText()) < 0){
+					textArea.setText("Max Queue length cannot be below 0");
+					maxQueueSizeField.setText("0");
+				}
+			}
+		});
 		
 		lblSizeParametres = new JLabel("Size Parameters:");
 		lblSizeParametres.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
@@ -169,47 +246,78 @@ public class GUISimulator extends JFrame {
 		lblMeanIntendedStay.setBounds(69, 322, 167, 14);
 		contentPane.add(lblMeanIntendedStay);
 		
-		DEFAULT_SEED = new JTextField();
-		DEFAULT_SEED.setText("100");
-		DEFAULT_SEED.setColumns(10);
-		DEFAULT_SEED.setBounds(267, 215, 86, 20);
-		contentPane.add(DEFAULT_SEED);
+		seedField = new JTextField();
+		seedField.setText(String.valueOf(seed));
+		seedField.setColumns(10);
+		seedField.setBounds(267, 215, 86, 20);
+		contentPane.add(seedField);
 		
-		DEFAULT_CAR_PROB = new JTextField();
-		DEFAULT_CAR_PROB.setText("1.00");
-		DEFAULT_CAR_PROB.setColumns(10);
-		DEFAULT_CAR_PROB.setBounds(267, 241, 86, 20);
-		contentPane.add(DEFAULT_CAR_PROB);
-		
-		DEFAULT_SMALL_CAR_PROB = new JTextField();
-		DEFAULT_SMALL_CAR_PROB.setText("0.20");
-		DEFAULT_SMALL_CAR_PROB.setColumns(10);
-		DEFAULT_SMALL_CAR_PROB.setBounds(267, 267, 86, 20);
-		contentPane.add(DEFAULT_SMALL_CAR_PROB);
-		
-		DEFAULT_MOTORCYCLE_PROB = new JTextField();
-		DEFAULT_MOTORCYCLE_PROB.setText("0.05");
-		DEFAULT_MOTORCYCLE_PROB.setColumns(10);
-		DEFAULT_MOTORCYCLE_PROB.setBounds(267, 293, 86, 20);
-		contentPane.add(DEFAULT_MOTORCYCLE_PROB);
-		
-		DEFAULT_INTENDED_STAY_MEAN = new JTextField();
-		DEFAULT_INTENDED_STAY_MEAN.addKeyListener(new KeyAdapter() {
+		carProbField = new JTextField();
+		carProbField.setText(String.valueOf(carProb));
+		carProbField.setColumns(10);
+		carProbField.setBounds(267, 241, 86, 20);
+		contentPane.add(carProbField);
+		carProbField.addFocusListener(new FocusAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
-				DEFAULT_INTENDED_STAY_SD.setText(String.valueOf(Double.parseDouble(DEFAULT_INTENDED_STAY_MEAN.getText())/3));
+			public void focusLost(FocusEvent e) {
+				if(Double.parseDouble(carProbField.getText()) < 0 ||
+						Double.parseDouble(carProbField.getText()) > 1){
+					textArea.setText("Probability must be between 0 and 1");
+					carProbField.setText("0");
+				}
 			}
 		});
-		DEFAULT_INTENDED_STAY_MEAN.setText("120.0");
-		DEFAULT_INTENDED_STAY_MEAN.setColumns(10);
-		DEFAULT_INTENDED_STAY_MEAN.setBounds(267, 319, 86, 20);
-		contentPane.add(DEFAULT_INTENDED_STAY_MEAN);
 		
-		DEFAULT_INTENDED_STAY_SD = new JTextField();
-		DEFAULT_INTENDED_STAY_SD.setEditable(false);
-		DEFAULT_INTENDED_STAY_SD.setColumns(10);
-		DEFAULT_INTENDED_STAY_SD.setBounds(267, 345, 86, 20);
-		contentPane.add(DEFAULT_INTENDED_STAY_SD);
+		smallCarProbField = new JTextField();
+		smallCarProbField.setText(String.valueOf(smallCarProb));
+		smallCarProbField.setColumns(10);
+		smallCarProbField.setBounds(267, 267, 86, 20);
+		contentPane.add(smallCarProbField);
+		smallCarProbField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(Double.parseDouble(smallCarProbField.getText()) < 0 ||
+						Double.parseDouble(smallCarProbField.getText()) > 1){
+					textArea.setText("Probability must be between 0 and 1");
+					smallCarProbField.setText("0");
+				}
+			}
+		});
+		
+		motoProbField = new JTextField();
+		motoProbField.setText(String.valueOf(motoProb));
+		motoProbField.setColumns(10);
+		motoProbField.setBounds(267, 293, 86, 20);
+		contentPane.add(motoProbField);
+		motoProbField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(Double.parseDouble(motoProbField.getText()) < 0 ||
+						Double.parseDouble(motoProbField.getText()) > 1){
+					textArea.setText("Probability must be between 0 and 1");
+					motoProbField.setText("0");
+				}
+			}
+		});
+		
+		intendedStayMeanField = new JTextField();
+		intendedStayMeanField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				intendedStaySDField.setText(String.format("%.2f", Double.parseDouble(intendedStayMeanField.getText())/3));
+			}
+		});
+		intendedStayMeanField.setText(String.valueOf(intendedStayMean));
+		intendedStayMeanField.setColumns(10);
+		intendedStayMeanField.setBounds(267, 319, 86, 20);
+		contentPane.add(intendedStayMeanField);
+		
+		intendedStaySDField = new JTextField();
+		intendedStaySDField.setEditable(false);
+		intendedStaySDField.setColumns(10);
+		intendedStaySDField.setBounds(267, 345, 86, 20);
+		intendedStaySDField.setText(String.format("%.2f", Double.parseDouble(intendedStaySDField.getText())/3));
+		contentPane.add(intendedStaySDField);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBackground(Color.WHITE);
@@ -220,6 +328,10 @@ public class GUISimulator extends JFrame {
 		menuBar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		menuBar.setForeground(new Color(0, 0, 0));
 		tabbedPane.addTab("  Log  ", null, menuBar, null);
+		
+		textArea = new JTextArea();
+		textArea.setEditable(false);
+		menuBar.add(textArea);
 		
 		JMenuBar menuBar_1 = new JMenuBar();
 		menuBar_1.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -232,6 +344,19 @@ public class GUISimulator extends JFrame {
 		tabbedPane.addTab("  Summary Report  ", null, menuBar_2, null);
 		
 		JButton btnRunSimulation = new JButton("Run Simulation");
+		btnRunSimulation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				launchSimulation(Integer.parseInt(maxCarSpacesField.getText()), 
+					Integer.parseInt(maxSmallCarSpacesField.getText()), 
+					Integer.parseInt(maxMotoSpacesField.getText()), 
+					Integer.parseInt(maxQueueSizeField.getText()), 
+					Integer.parseInt(seedField.getText()), 
+					Double.parseDouble(carProbField.getText()), 
+					Double.parseDouble(smallCarProbField.getText()), 
+					Double.parseDouble(motoProbField.getText()), 
+					Double.parseDouble(intendedStayMeanField.getText()));
+			}
+		});
 		btnRunSimulation.setBackground(Color.WHITE);
 		btnRunSimulation.setFont(new Font("Tahoma", Font.ITALIC, 20));
 		btnRunSimulation.setBounds(150, 548, 240, 34);
@@ -244,5 +369,6 @@ public class GUISimulator extends JFrame {
 		separator_1 = new JSeparator();
 		separator_1.setBounds(20, 373, 505, 2);
 		contentPane.add(separator_1);
+		
 	}
 }
