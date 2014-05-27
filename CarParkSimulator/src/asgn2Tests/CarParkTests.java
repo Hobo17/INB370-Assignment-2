@@ -80,12 +80,12 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Test method for 
+	 * Test method for archiveDepartingVehicle with an unparked car
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
 	@Test(expected=VehicleException.class)
-	public void testDepartingVehicleParkedState() throws VehicleException, SimulationException {		
+	public void testDepartingVehicleUnparkedState() throws VehicleException, SimulationException {		
 		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		carpark.unparkVehicle(car, ARRIVAL_TIME + 10);
 		
@@ -93,7 +93,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for archiveDepartingVehicle with a queued vehicle
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -104,7 +104,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for archiveDepartingVehicle with a car in the correct state,
+	 * ie parked
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -115,7 +116,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for archiveDepartingVehicle with a car 
+	 * that is not in the carpark
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -132,7 +134,7 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Test method for 
+	 * Test method for archiveNewVehicle with a queued vehicle
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -143,7 +145,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for archiveNewVehicle with a parked car
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -154,7 +156,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for archiveNewVehicle using a new vehicle, 
+	 * ie in the correct state
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
 	@Test
@@ -167,7 +170,7 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Test method for 
+	 * Test method for archiveQueueFailures with a parked car
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -178,7 +181,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for archiveQueueFailures with an unparked car
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -190,7 +193,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for archiveQueueFailures with a car in the correct state,
+	 * ie queued
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -201,7 +205,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for archiveQueueFailures when the car has been waiting
+	 * longer than the maximum queue time
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -212,7 +217,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for archiveQueueFailures when the maximum queue time
+	 * has been reached
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -227,7 +233,7 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Test method for 
+	 * Test method for carParkEmpty when car park is empty
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
 	@Test
@@ -236,7 +242,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for carParkEmpty when carpark is not empty
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -251,22 +257,27 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Test method for 
+	 * Test method for carParkFull when carpark is full
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
 	@Test
 	public void testCarParkFullTrue() throws VehicleException, SimulationException {		
 		for (int i = 0; i < MAX_CAR_SPACES; i++) {
-			Car car = new Car("C" + i, ARRIVAL_TIME + 1, NOT_SMALL);
+			Car car = new Car("C" + i, ARRIVAL_TIME + 1, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME + 1, INTENDED_DURATION);
+		}
+		
+		for (int i = 0; i < MAX_MOTORCYCLE_SPACES; i++) {
+			MotorCycle moto = new MotorCycle(VEH_ID, ARRIVAL_TIME);
+			carpark.parkVehicle(moto, ARRIVAL_TIME + 1, INTENDED_DURATION);
 		}
 		
 		assertTrue(carpark.carParkFull());
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for carParkFull when carpark is not full
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -277,6 +288,11 @@ public class CarParkTests {
 			carpark.parkVehicle(car, ARRIVAL_TIME + 1, INTENDED_DURATION);
 		}
 		
+		for (int i = 0; i < MAX_MOTORCYCLE_SPACES; i++) {
+			MotorCycle moto = new MotorCycle(VEH_ID, ARRIVAL_TIME);
+			carpark.parkVehicle(moto, ARRIVAL_TIME + 1, INTENDED_DURATION);
+		}
+		
 		assertFalse(carpark.carParkFull());
 	}
 	
@@ -285,7 +301,7 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Test method for 
+	 * Test method for enterQueue with a new car when the queue is empty
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -295,7 +311,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for enterQueue with a new car when the queue is full
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -308,7 +324,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for enterQueue with a car that is already queued
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -319,7 +335,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for enterQueue with a parked car
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -334,7 +350,7 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Test method for 
+	 * Test method for exitQueue with a car in the correct state
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -345,7 +361,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for exitQueue with a car that is not in the correct state,
+	 * ie it has not been queued
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -355,7 +372,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for exitQueue with a parked car
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -366,7 +383,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for exitQueue when the time is after the end carpark time
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -377,7 +394,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for exitQueue with a time that is before the arrival time
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -388,7 +405,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for exitQueue with a time that is the same as the arrival time
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -403,7 +420,7 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Test method for 
+	 * Test method for getNumCars when the carpark is empty
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
 	@Test
@@ -412,7 +429,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for getNumCars when there are no cars and
+	 * only one motorcycle in the carpark
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -423,7 +441,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for getNumCars when there are multiple types of vehicles
+	 * in the carpark
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -453,7 +472,7 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Test method for 
+	 * Test method for getNumMotorCycles when the carpark is empty
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
 	@Test
@@ -462,7 +481,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for getNumMotorCycles when there are no motorcycles 
+	 * and only one car in the carpark
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -473,7 +493,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for getNumMotorCycles when there are multiple types
+	 * of vehicles in the carpark
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -503,7 +524,7 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Test method for 
+	 * Test method for getNumSmallCars when the carpark is empty
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
 	@Test
@@ -512,18 +533,21 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for getNumSmallCars when there is only one big car
+	 * and no small cars in the carpark
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
 	@Test
 	public void testGetNumSmallCarsBigCarsOnly() throws VehicleException, SimulationException {
+		Car car = new Car(VEH_ID, ONE, NOT_SMALL);
 		carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		assertEquals(carpark.getNumSmallCars(), 0);
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for getNumSmallCars when there are multiples types
+	 * of vehicles in the carpark
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -553,7 +577,7 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Test method for 
+	 * Test method for getNumVehiclesInQueue when the queue is empty
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
 	@Test
@@ -562,7 +586,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for getNumVehiclesInQueue when there are multiple
+	 * types of vehicles in the queue
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -589,7 +614,7 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Test method for 
+	 * Test method for parkVehicle with a big car
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -602,7 +627,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for parkVehicle with a small car
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -615,7 +640,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for parkVehicle with a motorcycle
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -628,7 +653,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for parkVehicle with a big car when there are no spaces
+	 * for a big car
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -641,7 +667,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for parkVehicle for a small car when there are no spaces
+	 * for a small car
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -654,7 +681,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for parkVehicle for a motorcycle when there are no spaces
+	 * for a motorcycle
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -667,16 +695,17 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for parkVehicle when there are multiple types of vehicles
+	 * and no suitable spaces are available
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws VehicleException 
 	 */
 	@Test(expected=SimulationException.class)
 	public void testParkVehicleMultipleVehicles() throws SimulationException, VehicleException {
 		
-		// Fill all car spaces with big cars
+		// Fill all car spaces with small cars
 		for (int i = 0; i < Constants.DEFAULT_MAX_CAR_SPACES; i++) {
-			Car car = new Car("C" + i, ONE, NOT_SMALL);
+			Car car = new Car("C" + i, ONE, SMALL);
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
@@ -692,7 +721,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for parkVehicle when all small car spaces are full
+	 * and another small car attempts to park
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws VehicleException 
 	 */
@@ -711,7 +741,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for parkVehicle when all motorcycle spaces are full
+	 * and another motorcycle attempts to park
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws VehicleException 
 	 */
@@ -729,7 +760,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for parkVehicle when the same car attempts to park twice
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -744,7 +775,7 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Test method for 
+	 * Test method for processQueue when a car is in the queue
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -755,7 +786,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for processQueue when the next car is a big car and
+	 * all big car spaces are full
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -766,12 +798,14 @@ public class CarParkTests {
 			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
 		}
 		
+		Car car = new Car("C123", ONE, NOT_SMALL);
 		carpark.enterQueue(car);
 		carpark.processQueue(ARRIVAL_TIME, sim);
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for processQueue when the next car is a small car and
+	 * all car spaces are full
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -787,7 +821,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for processQueue when the next vehicle is a motorcycle
+	 * and all motorcycle spaces are full
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -817,7 +852,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for processQueue with a car in the correct state,
+	 * ie queued
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -828,7 +864,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for processQueue with a new car
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -839,7 +875,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for processQueue with a parked car
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -850,7 +886,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for processQueue with an archived car
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -863,7 +899,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for processQueue when the time is before the arrival time
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -879,7 +915,7 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Test method for 
+	 * Test method for queueEmpty when the queue is empty
 	 * @throws asgn2.Exceptions.VehicleException
 	 */
 	@Test
@@ -888,7 +924,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for queueEmpty when the queue is not empty
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -903,7 +939,7 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Test method for 
+	 * Test method for queueFull when the queue is full
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -917,7 +953,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for queueFull when the queue is not full
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -932,7 +968,8 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 	
 	/**
-	 * Test method for 
+	 * Test method for spacesAvailable with a big car when there are 
+	 * spaces available for a big car
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -944,7 +981,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for spacesAvailable with  big car when there are
+	 * no spaces available for a big car
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -958,7 +996,8 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for spacesAvailable wih a small car when there are
+	 * spaces available for a small car
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -969,7 +1008,25 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for spacesAvailable wth a small car when all
+	 * small car spaces are taken, but there are still big car
+	 * spaces left
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @throws asgn2.Exceptions.SimulationException
+	 */
+	@Test
+	public void testSpacesAvailableTrueSmallCar2() throws VehicleException, SimulationException {
+		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + 3); i++) {
+			Car car = new Car("C" + i, ONE, SMALL);
+			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		}
+		assertTrue(carpark.spacesAvailable(car));
+	}
+	
+	/**
+	 * Test method for spacesAvailable wth a small car when there are
+	 * no spaces available for a small car,
+	 * ie all small car and big car spaces are taken
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -983,7 +1040,31 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for spacesAvailable with a small car when the
+	 * small cars have overflowed into the big car spaces, and the
+	 * remaining big car spaces are flled with big cars
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @throws asgn2.Exceptions.SimulationException
+	 */
+	@Test
+	public void testSpacesAvailableFalseSmallCar2() throws VehicleException, SimulationException {
+		for (int i = 0; i < (MAX_SMALL_CAR_SPACES + 2); i++) {
+			Car car = new Car("C" + i, ONE, SMALL);
+			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		}
+		
+		for (int i = 0; i < (MAX_CAR_SPACES - MAX_SMALL_CAR_SPACES - 2); i++) {
+			Car car = new Car("C" + i, ONE, NOT_SMALL);
+			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		}
+		
+		Car car = new Car("C123", ONE, SMALL);
+		assertFalse(carpark.spacesAvailable(car));
+	}
+	
+	/**
+	 * Test method for spacesAvailable with a motorcycle when there are
+	 * spaces available for a motorcycle
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -994,7 +1075,25 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for spacesAvailable wth a motorcycle when all
+	 * motorcycle spaces are taken, but there are still small car
+	 * spaces left
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @throws asgn2.Exceptions.SimulationException
+	 */
+	@Test
+	public void testSpacesAvailableTrueMotorcycle2() throws VehicleException, SimulationException {
+		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + 3); i++) {
+			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
+			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
+		}
+		assertTrue(carpark.spacesAvailable(moto));
+	}
+	
+	/**
+	 * Test method for spacesAvailable with a motorcycle when there are
+	 * no spaces available available for a motorcycle,
+	 * ie all motorcycle and small car spaces are taken
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -1007,12 +1106,35 @@ public class CarParkTests {
 		assertFalse(carpark.spacesAvailable(moto));
 	}
 	
+	/**
+	 * Test method for spacesAvailable with a motorcycle when the
+	 * motorcycles have overflowed into the small car spaces, and the
+	 * remaining small car spaces are flled with small cars
+	 * @throws asgn2.Exceptions.VehicleException
+	 * @throws asgn2.Exceptions.SimulationException
+	 */
+	@Test
+	public void testSpacesAvailableFalseMotorcycle2() throws VehicleException, SimulationException {
+		for (int i = 0; i < (MAX_MOTORCYCLE_SPACES + 2); i++) {
+			MotorCycle moto = new MotorCycle("M" + i, ARRIVAL_TIME);
+			carpark.parkVehicle(moto, ARRIVAL_TIME, INTENDED_DURATION);
+		}
+		
+		for (int i = 0; i < (MAX_SMALL_CAR_SPACES); i++) {
+			Car car = new Car("C" + i, ONE, SMALL);
+			carpark.parkVehicle(car, ARRIVAL_TIME, INTENDED_DURATION);
+		}
+		
+		assertFalse(carpark.spacesAvailable(moto));
+	}
+	
 	//////////////////////////////////////////////////////////////////////////
 	// tryProcessNewVehicle tests
 	//////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Test method for 
+	 * Test method for tryProcessNewVehicle with a big car when there are
+	 * o spaces available for a big car
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -1026,7 +1148,9 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for tryProcessNewVehicle with a small car when there are
+	 * no spaces available for a small car,
+	 * ie all small car and big car spaces are taken
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -1040,7 +1164,9 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for tryProcessNewVehicle with a motorcycle when there are
+	 * no spaces available for a mototcycle,
+	 * ie all motorcycle and small car spaces are taken
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
@@ -1058,7 +1184,8 @@ public class CarParkTests {
 	//////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Test method for 
+	 * Test method for unparkVehicle with a vehicle in the correct state,
+	 * ie parked
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -1069,7 +1196,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for unparkVehicle with a vehicle that has not been parked
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -1079,7 +1206,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for unparkVehicle with a queued vehicle
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -1090,7 +1217,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for unparkVehicle when the time is before the arrival time
 	 * @throws asgn2.Exceptions.VehicleException
 	 * @throws asgn2.Exceptions.SimulationException
 	 */
@@ -1101,7 +1228,7 @@ public class CarParkTests {
 	}
 	
 	/**
-	 * Test method for 
+	 * Test method for unparkVehicle with a vehicle that has already been unparked
 	 * @throws asgn2.Exceptions.SimulationException
 	 * @throws asgn2.Exceptions.VehicleException 
 	 */
