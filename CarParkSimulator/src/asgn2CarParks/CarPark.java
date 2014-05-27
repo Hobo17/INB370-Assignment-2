@@ -184,7 +184,7 @@ public class CarPark {
 	public void archiveQueueFailures(int time) throws VehicleException,
 			SimulationException {
 		
-		ArrayList<Vehicle> tempCurVehicles = new ArrayList<Vehicle>(currentVehicles);
+		ArrayList<Vehicle> tempCurVehicles = new ArrayList<Vehicle>(queuedVehicles);
 		Iterator<Vehicle> vehiclesIter = tempCurVehicles.iterator();
 
 		while (vehiclesIter.hasNext()) {
@@ -218,7 +218,7 @@ public class CarPark {
 	 * 
 	 * @return true if car park full, false otherwise
 	 */
-	public boolean carParkFull() {
+	public boolean carParkFull() {;
 		return(this.numVehicles == this.maxCarParkSpaces);
 	}
 
@@ -278,7 +278,7 @@ public class CarPark {
 	 * @return String containing dump of final car park state
 	 */
 	public String finalState() {
-		String str = "Vehicles Processed: count:" + this.numVehicles
+		String str = "Vehicles Processed: count:" + this.numVehTotal
 				+ ", logged: " + this.archivedVehicles.size()
 				+ "\nVehicle Record: \n";
 		for (Vehicle v : this.archivedVehicles) {
@@ -332,7 +332,7 @@ public class CarPark {
 	 * @return String containing current state
 	 */
 	public String getStatus(int time) {
-		String str = time + "::" + this.numVehicles + "::" + "P:"
+		String str = time + "::" + this.numVehTotal + "::" + "P:"
 				+ this.currentVehicles.size() + "::" + "C:" + this.numCars
 				+ "::S:" + this.numSmallCars + "::M:" + this.numMotorCycles
 				+ "::D:" + this.numDissatisfied + "::A:"
@@ -405,9 +405,9 @@ public class CarPark {
 					"The vehicle is not in the correct state.");
 		}
 
+		numVehicles++;
 		this.currentVehicles.add(v);
 		v.enterParkedState(time, intendedDuration);
-		numVehicles++;
 
 		if (v instanceof Car) {
 			numCars++;
@@ -550,20 +550,18 @@ public class CarPark {
 		Vehicle newVehicle;
 		
 		if (sim.newCarTrial()) {
-			numVehTotal++;
 			
 			if (sim.smallCarTrial()) {
-				newVehicle = new Car("C" + numSmallCars, time, true);
+				newVehicle = new Car("C" + (numVehTotal + 1), time, true);
 				processNewVehicle(newVehicle, time, sim);
 			} else {
-				newVehicle = new Car("C" + numCars, time, false);
+				newVehicle = new Car("C" + (numVehTotal + 1), time, false);
 				processNewVehicle(newVehicle, time, sim);
 			}
 		}
 		
 		if (sim.motorCycleTrial()) {
-			numVehTotal++;
-			newVehicle = new MotorCycle("M" + numMotorCycles, time);
+			newVehicle = new MotorCycle("MC" + (numVehTotal + 1), time);
 			processNewVehicle(newVehicle, time, sim);
 		}
 		
@@ -586,11 +584,6 @@ public class CarPark {
 	private void processNewVehicle(Vehicle v, int time, Simulator sim)
 			throws VehicleException, SimulationException {
 		
-		if (!this.spacesAvailable(v)) {
-			throw new SimulationException("There are no spaces available "
-					+ "for this type of vehicle.");
-		} 
-		
 		if (this.spacesAvailable(v)) {
 			this.parkVehicle(v,  time,  sim.setDuration());
 			this.status += setVehicleMsg(v, "N", "P");
@@ -601,6 +594,9 @@ public class CarPark {
 			this.archiveNewVehicle(v);
 			this.status += setVehicleMsg(v, "N", "A");
 		}
+
+		numVehicles++;
+		numVehTotal++;
 		
 	}
 
@@ -632,7 +628,6 @@ public class CarPark {
 		}
 		
 		this.currentVehicles.remove(v);
-		this.archivedVehicles.add(v);
 		v.exitParkedState(departureTime);
 		this.status += setVehicleMsg(v, "P", "A");
 		
@@ -644,6 +639,7 @@ public class CarPark {
 		} else if(v instanceof MotorCycle) {
 			this.numMotorCycles--;
 		}
+		numVehicles--;
 		
 	}
 

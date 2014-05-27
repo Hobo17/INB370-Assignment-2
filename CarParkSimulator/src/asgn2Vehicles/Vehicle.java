@@ -193,7 +193,7 @@ public abstract class Vehicle {
 		}
 		
 		this.exitTime = exitTime;
-		this.state = State.N;
+		this.state = State.A;
 	}
 	
 	/**
@@ -265,8 +265,9 @@ public abstract class Vehicle {
 	 *            time exceeds max allowable 
 	 */
 	public boolean isSatisfied() {
-		return(this.previousStates.contains("P") || (!this.previousStates.contains("P") 
-				&& (exitTime - arrivalTime) <= Constants.MAXIMUM_QUEUE_TIME));
+		return(this.previousStates.contains("P")
+				|| (!this.previousStates.contains("P") && (exitTime - arrivalTime) <= Constants.MAXIMUM_QUEUE_TIME)
+				&& this.state != State.N);
 	}
 	
 	/* (non-Javadoc)
@@ -283,6 +284,9 @@ public abstract class Vehicle {
 		output += "\n" + (this.wasQueued() 
 						? "Exit from Queue: " + this.exitTime + 
 								"\nQueuing Time: " + String.valueOf(this.exitTime - this.arrivalTime)
+									+ ((this.exitTime - this.arrivalTime > Constants.MAXIMUM_QUEUE_TIME)
+										? "\nExceeded maximum acceptable queuing time by: " + (this.exitTime - this.arrivalTime)
+										: "")
 						: "Vehicle was not queued");
 		
 		// Determine parking information
@@ -296,7 +300,7 @@ public abstract class Vehicle {
 		
 		// Check to see if it is a car, if so check if it is small or not.
 		output += (this instanceof Car) 
-				? "\nCar can" + (((Car)this).isSmall() ? "" : "not") + " use small parking space"
+				? "\nCar can" + (((Car)this).isSmall() ? "" : "not") + " use small " + (((Car)this).isSmall() ? "car " : "") + "parking space"
 				: "";
 		
 		return output;
